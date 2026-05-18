@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Europe 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5EFE4;
+    --warm-white: #FAF7F2;
+    --ink: #1A1612;
+    --muted: #7A7068;
+    --accent: #C4622D;
+    --accent-light: #E8956A;
+    --gold: #C9A84C;
+    --sage: #6B8F71;
+    --blue: #3D5A7A;
+    --border: rgba(26,22,18,0.12);
+    --card-bg: #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    max-width: 430px;
+    margin: 0 auto;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* ─── TOP BAR ─── */
+  .topbar {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 16px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .topbar-left { display: flex; flex-direction: column; }
+  .topbar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    line-height: 1;
+  }
+  .topbar-subtitle {
+    font-size: 11px;
+    color: rgba(245,239,228,0.55);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 3px;
+    font-weight: 300;
+  }
+  .topbar-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-light);
+    text-align: right;
+  }
+  .topbar-countdown {
+    font-size: 9px;
+    color: rgba(245,239,228,0.45);
+    text-align: right;
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ─── BOTTOM NAV ─── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: var(--ink);
+    display: flex;
+    z-index: 100;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 4px 14px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: rgba(245,239,228,0.4);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    gap: 4px;
+    transition: color 0.2s;
+  }
+  .nav-item.active { color: var(--accent-light); }
+  .nav-item svg { width: 20px; height: 20px; }
+  .nav-item span { font-size: 9px; }
+
+  /* ─── PAGES ─── */
+  .page { display: none; padding-bottom: 80px; animation: fadeIn 0.25s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ─── SECTION LABEL ─── */
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    padding: 20px 20px 8px;
+  }
+
+  /* ─── HERO STRIP ─── */
+  .hero-strip {
+    background: var(--ink);
+    padding: 0 20px 20px;
+    color: var(--cream);
+  }
+  .hero-cities {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: rgba(245,239,228,0.5);
+    padding-top: 16px;
+    margin-bottom: 6px;
+  }
+  .hero-dates {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent-light);
+    letter-spacing: 0.04em;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .hero-stat {
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+  .hero-stat-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1;
+  }
+  .hero-stat-label {
+    font-size: 9px;
+    color: rgba(245,239,228,0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+  }
+
+  /* ─── FLIGHT CARD ─── */
+  .info-card {
+    background: var(--card-bg);
+    margin: 0 16px 10px;
+    border-radius: 14px;
+    padding: 16px;
+    border: 1px solid var(--border);
+  }
+  .info-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .info-card-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .info-card-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    background: var(--cream);
+    padding: 3px 8px;
+    border-radius: 20px;
+    color: var(--ink);
+    font-weight: 400;
+  }
+  .flight-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .flight-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .flight-row:first-child { padding-top: 0; }
+  .flight-dir {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    width: 44px;
+    flex-shrink: 0;
+  }
+  .flight-route {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 400;
+    flex: 1;
+  }
+  .flight-time {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  /* ─── DAY CARDS ─── */
+  .day-card {
+    background: var(--card-bg);
+    margin: 0 16px 12px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+  }
+  .day-card:active { box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+  .day-card-header {
+    display: flex;
+    align-items: stretch;
+  }
+  .day-card-date {
+    background: var(--accent);
+    color: white;
+    padding: 14px 12px;
+    min-width: 54px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .day-card-date.brussels { background: var(--blue); }
+  .day-card-date.paris { background: #5C4A7A; }
+  .day-card-date.travel { background: var(--muted); }
+  .day-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .day-mon {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.8;
+    margin-top: 2px;
+  }
+  .day-card-main {
+    padding: 12px 14px;
+    flex: 1;
+  }
+  .day-card-city {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .day-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .day-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+  }
+  .tag {
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: var(--cream);
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .tag.booked { background: #EAF4EC; color: var(--sage); }
+  .tag.alert { background: #FEF3EC; color: var(--accent); }
+
+  .day-card-body {
+    display: none;
+    padding: 0 14px 14px;
+    border-top: 1px solid var(--border);
+    margin-top: 2px;
+  }
+  .day-card-body.open { display: block; }
+
+  .activity-list { margin-top: 10px; }
+  .activity-item {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .activity-item:last-child { border-bottom: none; }
+  .activity-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    width: 42px;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .activity-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .activity-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+  .activity-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+  .activity-dot.booked { background: var(--sage); }
+  .activity-dot.key { background: var(--accent); }
+
+  .nearby-section { margin-top: 14px; }
+  .nearby-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .nearby-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .nearby-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .nearby-item {
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 10px;
+  }
+  .nearby-item-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .nearby-item-type {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ─── BUDGET PAGE ─── */
+  .budget-hero {
+    background: var(--ink);
+    padding: 20px 20px 24px;
+    color: var(--cream);
+  }
+  .budget-total-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(245,239,228,0.5);
+    margin-bottom: 4px;
+  }
+  .budget-total-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--cream);
+  }
+  .budget-total-sub {
+    font-size: 12px;
+    color: rgba(245,239,228,0.45);
+    margin-top: 4px;
+  }
+  .budget-per {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .budget-per-item {
+    flex: 1;
+    background: rgba(255,255,255,0.07);
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+  .budget-per-label {
+    font-size: 9px;
+    color: rgba(245,239,228,0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .budget-per-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 18px;
+    color: var(--cream);
+    margin-top: 2px;
+  }
+
+  .budget-row {
+    display: flex;
+    align-items: center;
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--card-bg);
+  }
+  .budget-row:first-child { border-radius: 14px 14px 0 0; }
+  .budget-row:last-child { border-radius: 0 0 14px 14px; border-bottom: none; }
+  .budget-row-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+    margin-right: 12px;
+  }
+  .budget-row-name { flex: 1; }
+  .budget-row-title { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .budget-row-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .budget-row-amount {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--ink);
+    text-align: right;
+  }
+  .budget-row-status {
+    font-size: 9px;
+    margin-top: 2px;
+    text-align: right;
+  }
+  .status-paid { color: var(--sage); }
+  .status-due { color: var(--accent); }
+  .status-tbd { color: var(--gold); }
+
+  .budget-group {
+    margin: 0 16px 12px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .budget-group-header {
+    background: var(--cream);
+    padding: 10px 16px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ─── BOOKINGS PAGE ─── */
+  .booking-card {
+    background: var(--card-bg);
+    margin: 0 16px 10px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .booking-header {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .booking-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .booking-info { flex: 1; }
+  .booking-title { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .booking-subtitle { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .booking-chevron {
+    font-size: 16px;
+    color: var(--muted);
+    transition: transform 0.2s;
+  }
+  .booking-chevron.open { transform: rotate(90deg); }
+  .booking-detail {
+    display: none;
+    padding: 0 16px 14px;
+    border-top: 1px solid var(--border);
+  }
+  .booking-detail.open { display: block; }
+  .booking-ref {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: var(--cream);
+    border-radius: 8px;
+    display: inline-block;
+    letter-spacing: 0.1em;
+  }
+  .booking-detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .booking-detail-row:last-child { border-bottom: none; }
+  .booking-detail-key { color: var(--muted); }
+  .booking-detail-val { font-weight: 500; color: var(--ink); text-align: right; }
+
+  /* ─── AI CHAT ─── */
+  .chat-area {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: calc(100vh - 200px);
+  }
+  .chat-bubble {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .chat-bubble.assistant {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--ink);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+  .chat-bubble.user {
+    background: var(--accent);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+  .chat-bubble.loading {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    align-self: flex-start;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .chat-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    padding: 0 16px;
+    margin-bottom: 10px;
+  }
+  .chat-suggestion-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 7px 13px;
+    font-size: 12px;
+    color: var(--ink);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+  }
+  .chat-suggestion-btn:active { background: var(--cream); }
+  .chat-input-bar {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: var(--warm-white);
+    border-top: 1px solid var(--border);
+    padding: 10px 14px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    z-index: 99;
+  }
+  .chat-input {
+    flex: 1;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 10px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+    resize: none;
+    line-height: 1.4;
+    max-height: 90px;
+    overflow-y: auto;
+  }
+  .chat-send-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .chat-send-btn:disabled { background: var(--border); cursor: not-allowed; }
+
+  /* ─── TIPS PAGE ─── */
+  .tip-card {
+    background: var(--card-bg);
+    margin: 0 16px 10px;
+    border-radius: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+  }
+  .tip-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .tip-icon {
+    font-size: 20px;
+    width: 36px;
+    text-align: center;
+  }
+  .tip-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .tip-subtitle { font-size: 11px; color: var(--muted); }
+  .tip-item {
+    font-size: 12px;
+    color: var(--ink);
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+    display: flex;
+    gap: 8px;
+  }
+  .tip-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .tip-item::before { content: '→'; color: var(--accent); flex-shrink: 0; margin-top: 0px; }
+
+  /* ─── PACKING ─── */
+  .pack-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .pack-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .pack-check.checked { background: var(--sage); border-color: var(--sage); }
+  .pack-check.checked::after { content: '✓'; color: white; font-size: 11px; font-weight: 700; }
+  .pack-item-name { font-size: 13px; color: var(--ink); flex: 1; }
+  .pack-item-name.checked { text-decoration: line-through; color: var(--muted); }
+  .pack-item-tag {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    background: var(--cream);
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+
+  /* ─── UTILS ─── */
+  .divider { height: 1px; background: var(--border); margin: 0 16px; }
+
+  .pill-toggle {
+    display: flex;
+    gap: 6px;
+    padding: 12px 16px 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .pill-toggle::-webkit-scrollbar { display: none; }
+  .pill {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .pill.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .empty-state-icon { font-size: 32px; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-title">Europe 2026 ✦</div>
+    <div class="topbar-subtitle">Boon & TG · NL · BE · FR</div>
+  </div>
+  <div>
+    <div class="topbar-date" id="topbarDate">May 17</div>
+    <div class="topbar-countdown" id="topbarCountdown">loading…</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE: ITINERARY ═══════════ -->
+<div class="page active" id="page-itinerary">
+
+  <div class="hero-strip">
+    <div class="hero-cities">Amsterdam · Brussels · Ghent · Bruges · Paris</div>
+    <div class="hero-dates">May 23 — 31, 2026</div>
+    <div class="hero-grid">
+      <div class="hero-stat">
+        <div class="hero-stat-val">9</div>
+        <div class="hero-stat-label">Days</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">3</div>
+        <div class="hero-stat-label">Countries</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">5</div>
+        <div class="hero-stat-label">Cities</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pill-toggle" id="countryFilter">
+    <button class="pill active" onclick="filterDays('all')">All Days</button>
+    <button class="pill" onclick="filterDays('nl')">🇳🇱 Netherlands</button>
+    <button class="pill" onclick="filterDays('be')">🇧🇪 Belgium</button>
+    <button class="pill" onclick="filterDays('fr')">🇫🇷 France</button>
+  </div>
+
+  <div class="section-label">Your Trip</div>
+  <div id="dayCardsContainer"></div>
+
+</div>
+
+<!-- ═══════════ PAGE: BUDGET ═══════════ -->
+<div class="page" id="page-budget">
+
+  <div class="budget-hero">
+    <div class="budget-total-label">Total Trip Cost</div>
+    <div class="budget-total-val">$10,890</div>
+    <div class="budget-total-sub">CAD · Both travellers</div>
+    <div class="budget-per">
+      <div class="budget-per-item">
+        <div class="budget-per-label">Per person</div>
+        <div class="budget-per-val">$5,445</div>
+      </div>
+      <div class="budget-per-item">
+        <div class="budget-per-label">Food est.</div>
+        <div class="budget-per-val">€100/day</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Flights & Transport</div>
+  <div class="budget-group">
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#FEF3EC">✈️</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">International Flights</div>
+        <div class="budget-row-sub">YYZ ↔ AMS/CDG · Air Transat</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">$2,639</div>
+        <div class="budget-row-status status-paid">✓ Paid</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#EEF3FA">🚆</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">AMS → Brussels</div>
+        <div class="budget-row-sub">Eurocity Direct · May 26</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">$159.89</div>
+        <div class="budget-row-status status-paid">✓ Paid by TG</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#EEF3FA">🚆</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Brussels → Paris</div>
+        <div class="budget-row-sub">Train 9414 · May 28</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">€100</div>
+        <div class="budget-row-status status-tbd">⚠ Check</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#EEF3FA">🚆</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Brussels → AMS (return)</div>
+        <div class="budget-row-sub">Eurostar</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">$269.64</div>
+        <div class="budget-row-status status-paid">✓ Paid by TG</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#EEF3FA">🚌</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Day Trains · Belgium</div>
+        <div class="budget-row-sub">Ghent + Bruges + return</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">€77.60</div>
+        <div class="budget-row-status status-tbd">Book via Omio</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#EEF3FA">🚇</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Amsterdam Local</div>
+        <div class="budget-row-sub">GVB 2-day + NS extras</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">€62</div>
+        <div class="budget-row-status status-tbd">Buy on arrival</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#EEF3FA">🚇</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Paris Local</div>
+        <div class="budget-row-sub">Navigo day pass + CDG fare</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">€101.80</div>
+        <div class="budget-row-status status-tbd">Buy closer to trip</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#EEF3FA">🚖</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Uber Toronto RT</div>
+        <div class="budget-row-sub">YYZ airport transfers</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">$200</div>
+        <div class="budget-row-status status-tbd">Estimate</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Hotels</div>
+  <div class="budget-group">
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#FFF8EC">🏨</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Best Western Amsterdam</div>
+        <div class="budget-row-sub">May 23–26 · Breakfast incl.</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">$1,513</div>
+        <div class="budget-row-status status-due">Due at check-in</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#FFF8EC">🏨</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">NH Collection Brussels</div>
+        <div class="budget-row-sub">May 26–28 · Breakfast incl.</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">$491.83</div>
+        <div class="budget-row-status status-paid">✓ Paid by TG</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#FFF8EC">🏨</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Hotel Touring Paris</div>
+        <div class="budget-row-sub">May 28–31 · No breakfast</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">$857.40</div>
+        <div class="budget-row-status status-paid">✓ Paid by TG</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Attractions (Pre-booked)</div>
+  <div class="budget-group">
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#EAF4EC">🎨</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Rijksmuseum</div>
+        <div class="budget-row-sub">May 25 · 12:30 PM</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">$86.32</div>
+        <div class="budget-row-status status-paid">✓ Booked</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#EAF4EC">🌻</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Van Gogh Museum</div>
+        <div class="budget-row-sub">May 25 · 4:00 PM</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">$80.14</div>
+        <div class="budget-row-status status-paid">✓ Booked</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#EAF4EC">🖼️</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Louvre Museum</div>
+        <div class="budget-row-sub">May 29 · 5:00 PM</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">$102.57</div>
+        <div class="budget-row-status status-paid">✓ Booked</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#FEF3EC">⛵</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Canal Cruise AMS</div>
+        <div class="budget-row-sub">May 24 · via Klook</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">$38</div>
+        <div class="budget-row-status status-tbd">Book on Klook</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#FEF3EC">⛵</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Seine River Cruise</div>
+        <div class="budget-row-sub">May 28 evening</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">€30</div>
+        <div class="budget-row-status status-tbd">Book at vedettes</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#FEF3EC">⛪</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Sainte-Chapelle</div>
+        <div class="budget-row-sub">May 29</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">€60</div>
+        <div class="budget-row-status status-tbd">Book online</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#FEF3EC">🎨</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Musée d'Orsay</div>
+        <div class="budget-row-sub">May 30 · optional</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">€32</div>
+        <div class="budget-row-status status-tbd">Book online</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Other</div>
+  <div class="budget-group">
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#EEF3FA">🛂</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Visa Fee</div>
+        <div class="budget-row-sub">Paid by TG</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">$288</div>
+        <div class="budget-row-status status-paid">✓ Paid</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#EEF3FA">🛡️</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Travel Insurance</div>
+        <div class="budget-row-sub">Paid by TG</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">$43.80</div>
+        <div class="budget-row-status status-paid">✓ Paid</div>
+      </div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-icon" style="background:#FFF8EC">🏠</div>
+      <div class="budget-row-name">
+        <div class="budget-row-title">Barney Care</div>
+        <div class="budget-row-sub">TG to withdraw</div>
+      </div>
+      <div>
+        <div class="budget-row-amount">$500</div>
+        <div class="budget-row-status status-due">⚠ Arrange</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height:10px"></div>
+</div>
+
+<!-- ═══════════ PAGE: BOOKINGS ═══════════ -->
+<div class="page" id="page-bookings">
+
+  <div class="section-label">Flights</div>
+
+  <div class="booking-card">
+    <div class="booking-header" onclick="toggleBooking(this)">
+      <div class="booking-icon" style="background:#FEF3EC">✈️</div>
+      <div class="booking-info">
+        <div class="booking-title">YYZ → AMS · Departure</div>
+        <div class="booking-subtitle">Air Transat TS376 · May 22</div>
+      </div>
+      <div class="booking-chevron">›</div>
+    </div>
+    <div class="booking-detail">
+      <div class="booking-ref">ON40Y1</div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Departs</span><span class="booking-detail-val">Fri May 22 · 11:45 PM</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Arrives</span><span class="booking-detail-val">Sat May 23 · 1:10 PM AMS</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Flight</span><span class="booking-detail-val">TS376</span></div>
+    </div>
+  </div>
+
+  <div class="booking-card">
+    <div class="booking-header" onclick="toggleBooking(this)">
+      <div class="booking-icon" style="background:#FEF3EC">✈️</div>
+      <div class="booking-info">
+        <div class="booking-title">CDG → YYZ · Return</div>
+        <div class="booking-subtitle">Air Transat TS189 · May 31</div>
+      </div>
+      <div class="booking-chevron">›</div>
+    </div>
+    <div class="booking-detail">
+      <div class="booking-ref">ON40Y1</div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Departs</span><span class="booking-detail-val">Sun May 31 · 12:00 PM</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Arrives</span><span class="booking-detail-val">Sun May 31 · 2:25 PM YYZ</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Flight</span><span class="booking-detail-val">TS189</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Trains</div>
+
+  <div class="booking-card">
+    <div class="booking-header" onclick="toggleBooking(this)">
+      <div class="booking-icon" style="background:#EEF3FA">🚆</div>
+      <div class="booking-info">
+        <div class="booking-title">Amsterdam → Brussels</div>
+        <div class="booking-subtitle">Eurocity Direct · May 26</div>
+      </div>
+      <div class="booking-chevron">›</div>
+    </div>
+    <div class="booking-detail">
+      <div class="booking-detail-row"><span class="booking-detail-key">Departs</span><span class="booking-detail-val">Amsterdam Zuid 11:04 AM</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Arrives</span><span class="booking-detail-val">Bruxelles Midi ~1:00 PM</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Train</span><span class="booking-detail-val">ECD 9532 · Track 3</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Cost</span><span class="booking-detail-val">$159.89 CAD · Paid</span></div>
+    </div>
+  </div>
+
+  <div class="booking-card">
+    <div class="booking-header" onclick="toggleBooking(this)">
+      <div class="booking-icon" style="background:#EEF3FA">🚆</div>
+      <div class="booking-info">
+        <div class="booking-title">Brussels → Paris</div>
+        <div class="booking-subtitle">Thalys Train 9414 · May 28</div>
+      </div>
+      <div class="booking-chevron">›</div>
+    </div>
+    <div class="booking-detail">
+      <div class="booking-ref">HTJQMT</div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Departs</span><span class="booking-detail-val">Brussels Midi · 08:43</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Arrives</span><span class="booking-detail-val">Paris Gare du Nord · 10:05</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Note</span><span class="booking-detail-val">Arrive station by 7:00 AM</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Hotels</div>
+
+  <div class="booking-card">
+    <div class="booking-header" onclick="toggleBooking(this)">
+      <div class="booking-icon" style="background:#FFF8EC">🏨</div>
+      <div class="booking-info">
+        <div class="booking-title">Best Western Dam Square Inn</div>
+        <div class="booking-subtitle">Amsterdam · May 23–26</div>
+      </div>
+      <div class="booking-chevron">›</div>
+    </div>
+    <div class="booking-detail">
+      <div class="booking-detail-row"><span class="booking-detail-key">Address</span><span class="booking-detail-val">Gravenstraat 12–16</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Breakfast</span><span class="booking-detail-val">✓ Included</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Payment</span><span class="booking-detail-val">Due at check-in (Visa card)</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Cost</span><span class="booking-detail-val">$1,513 CAD</span></div>
+    </div>
+  </div>
+
+  <div class="booking-card">
+    <div class="booking-header" onclick="toggleBooking(this)">
+      <div class="booking-icon" style="background:#FFF8EC">🏨</div>
+      <div class="booking-info">
+        <div class="booking-title">NH Collection Brussels Centre</div>
+        <div class="booking-subtitle">Brussels · May 26–28</div>
+      </div>
+      <div class="booking-chevron">›</div>
+    </div>
+    <div class="booking-detail">
+      <div class="booking-detail-row"><span class="booking-detail-key">Address</span><span class="booking-detail-val">Blvd Adolphe Max 7</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Walk from station</span><span class="booking-detail-val">~9 minutes</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Breakfast</span><span class="booking-detail-val">✓ Included</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Cost</span><span class="booking-detail-val">$491.83 · Paid (TG Amex)</span></div>
+    </div>
+  </div>
+
+  <div class="booking-card">
+    <div class="booking-header" onclick="toggleBooking(this)">
+      <div class="booking-icon" style="background:#FFF8EC">🏨</div>
+      <div class="booking-info">
+        <div class="booking-title">Hotel Touring</div>
+        <div class="booking-subtitle">Paris · May 28–31</div>
+      </div>
+      <div class="booking-chevron">›</div>
+    </div>
+    <div class="booking-detail">
+      <div class="booking-detail-row"><span class="booking-detail-key">Address</span><span class="booking-detail-val">21 Rue Buffault, 75009</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">From Gare du Nord</span><span class="booking-detail-val">~8 min by bus</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Breakfast</span><span class="booking-detail-val">Not included</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Cost</span><span class="booking-detail-val">$857.40 · Paid (TG Amex)</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Pre-booked Attractions</div>
+
+  <div class="booking-card">
+    <div class="booking-header" onclick="toggleBooking(this)">
+      <div class="booking-icon" style="background:#EAF4EC">🎨</div>
+      <div class="booking-info">
+        <div class="booking-title">Rijksmuseum</div>
+        <div class="booking-subtitle">May 25 · 12:30 PM</div>
+      </div>
+      <div class="booking-chevron">›</div>
+    </div>
+    <div class="booking-detail">
+      <div class="booking-detail-row"><span class="booking-detail-key">Entry time</span><span class="booking-detail-val">12:30 PM (timed)</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Duration</span><span class="booking-detail-val">2–3 hours typical</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Booked via</span><span class="booking-detail-val">GetYourGuide · $86.32</span></div>
+    </div>
+  </div>
+
+  <div class="booking-card">
+    <div class="booking-header" onclick="toggleBooking(this)">
+      <div class="booking-icon" style="background:#EAF4EC">🌻</div>
+      <div class="booking-info">
+        <div class="booking-title">Van Gogh Museum</div>
+        <div class="booking-subtitle">May 25 · 4:00 PM</div>
+      </div>
+      <div class="booking-chevron">›</div>
+    </div>
+    <div class="booking-detail">
+      <div class="booking-detail-row"><span class="booking-detail-key">Entry time</span><span class="booking-detail-val">4:00 PM (timed)</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Buffer allowed</span><span class="booking-detail-val">15–30 min early ok</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Booked via</span><span class="booking-detail-val">Official website · $80.14</span></div>
+    </div>
+  </div>
+
+  <div class="booking-card">
+    <div class="booking-header" onclick="toggleBooking(this)">
+      <div class="booking-icon" style="background:#EAF4EC">🖼️</div>
+      <div class="booking-info">
+        <div class="booking-title">Louvre Museum</div>
+        <div class="booking-subtitle">May 29 · 5:00 PM</div>
+      </div>
+      <div class="booking-chevron">›</div>
+    </div>
+    <div class="booking-detail">
+      <div class="booking-detail-row"><span class="booking-detail-key">Entry time</span><span class="booking-detail-val">5:00 PM (avoids crowds)</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Open until</span><span class="booking-detail-val">9:45 PM on Fridays</span></div>
+      <div class="booking-detail-row"><span class="booking-detail-key">Booked via</span><span class="booking-detail-val">Louvre website · $102.57</span></div>
+    </div>
+  </div>
+
+  <div style="height:10px"></div>
+</div>
+
+<!-- ═══════════ PAGE: AI ASSISTANT ═══════════ -->
+<div class="page" id="page-chat">
+  <div class="chat-area" id="chatArea">
+    <div class="chat-bubble assistant">
+      Hey Boon! 👋 I'm your Europe 2026 trip assistant. I know your full itinerary, bookings, and budget. Ask me anything — recommendations, logistics, what to do near your next stop, food suggestions, you name it.
+    </div>
+  </div>
+
+  <div class="chat-suggestions" id="chatSuggestions">
+    <button class="chat-suggestion-btn" onclick="sendSuggestion(this)">Best café near Rijksmuseum?</button>
+    <button class="chat-suggestion-btn" onclick="sendSuggestion(this)">What to do if it rains in Bruges?</button>
+    <button class="chat-suggestion-btn" onclick="sendSuggestion(this)">Best local food in Ghent?</button>
+    <button class="chat-suggestion-btn" onclick="sendSuggestion(this)">Eiffel Tower tips</button>
+    <button class="chat-suggestion-btn" onclick="sendSuggestion(this)">Pack list reminder?</button>
+  </div>
+
+  <div class="chat-input-bar">
+    <textarea class="chat-input" id="chatInput" placeholder="Ask anything about your trip…" rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="chat-send-btn" id="chatSendBtn" onclick="sendChat()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE: TIPS & PACKING ═══════════ -->
+<div class="page" id="page-tips">
+
+  <div class="section-label">Essential Tips</div>
+
+  <div class="tip-card">
+    <div class="tip-card-header">
+      <div class="tip-icon">🚆</div>
+      <div>
+        <div class="tip-title">Train Travel</div>
+        <div class="tip-subtitle">Getting around Europe</div>
+      </div>
+    </div>
+    <div class="tip-item">Individual NS tickets cheaper than day pass for windmill area — one-way is best</div>
+    <div class="tip-item">Credit card tap works on Amsterdam GVB trams/metro</div>
+    <div class="tip-item">Belgian day trips: train is ~half the price of bus tours</div>
+    <div class="tip-item">Arrive Brussels station by 7:00 AM for 8:43 train to Paris</div>
+    <div class="tip-item">Book Paris transport passes closer to departure — multiple options available</div>
+  </div>
+
+  <div class="tip-card">
+    <div class="tip-card-header">
+      <div class="tip-icon">🍽️</div>
+      <div>
+        <div class="tip-title">Food & Eating</div>
+        <div class="tip-subtitle">Budget ~€100/day for both</div>
+      </div>
+    </div>
+    <div class="tip-item">Amsterdam breakfast included at Best Western — use it</div>
+    <div class="tip-item">Brussels & Paris breakfast also included at your hotels</div>
+    <div class="tip-item">Albert Cuyp market: 13-min walk from museum area, great cheap lunch</div>
+    <div class="tip-item">Jordaan: local cafés, much less touristy pricing vs. Dam Square</div>
+    <div class="tip-item">Paris: Relais de l'Entrecôte is single-dish, quick, and excellent value</div>
+    <div class="tip-item">Le Marais: Chez Alain Miam Miam, BOBI Filipino, PATATE for casual eats</div>
+  </div>
+
+  <div class="tip-card">
+    <div class="tip-card-header">
+      <div class="tip-icon">🎒</div>
+      <div>
+        <div class="tip-title">Logistics</div>
+        <div class="tip-subtitle">Day-to-day essentials</div>
+      </div>
+    </div>
+    <div class="tip-item">One carry-on recommended — makes train travel much easier</div>
+    <div class="tip-item">Book second-class trains — keep bags close, especially in Paris</div>
+    <div class="tip-item">Amsterdam: tap credit card on entry/exit of metro, not just entry</div>
+    <div class="tip-item">Van Gogh allows 15–30 min buffer before your timed slot</div>
+    <div class="tip-item">Louvre on Fridays open until 9:45 PM — great for 5 PM entry</div>
+    <div class="tip-item">Barney arrangement: TG to handle before departure</div>
+  </div>
+
+  <div class="tip-card">
+    <div class="tip-card-header">
+      <div class="tip-icon">💶</div>
+      <div>
+        <div class="tip-title">Money</div>
+        <div class="tip-subtitle">Cards & cash</div>
+      </div>
+    </div>
+    <div class="tip-item">KOHO card: good for travel spending, no FX fees</div>
+    <div class="tip-item">Amsterdam Best Western: put hold on Visa for hotel fee</div>
+    <div class="tip-item">Most attractions and restaurants take card — keep €50–80 cash for markets</div>
+    <div class="tip-item">Bruges boat tour: may be cash only at dock</div>
+  </div>
+
+  <div class="tip-card">
+    <div class="tip-card-header">
+      <div class="tip-icon">🗣️</div>
+      <div>
+        <div class="tip-title">Useful Phrases</div>
+        <div class="tip-subtitle">Dutch · French</div>
+      </div>
+    </div>
+    <div class="tip-item">Dank je wel (Thank you) · Alsjeblieft (Please/Here you go) · Hoeveel kost het? (How much?)</div>
+    <div class="tip-item">Merci beaucoup · S'il vous plaît · L'addition, s'il vous plaît (The bill, please)</div>
+    <div class="tip-item">Où est…? (Where is…?) · Un café, s'il vous plaît · Parlez-vous anglais?</div>
+  </div>
+
+  <div class="section-label">Packing List</div>
+  <div class="budget-group" id="packingList">
+    <!-- Generated by JS -->
+  </div>
+
+  <div style="height:10px"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="showPage('itinerary', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    <span>Days</span>
+  </button>
+  <button class="nav-item" onclick="showPage('budget', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    <span>Budget</span>
+  </button>
+  <button class="nav-item" onclick="showPage('bookings', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    <span>Bookings</span>
+  </button>
+  <button class="nav-item" onclick="showPage('chat', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span>Assistant</span>
+  </button>
+  <button class="nav-item" onclick="showPage('tips', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span>Tips</span>
+  </button>
+</nav>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────
+const tripDays = [
+  {
+    date: 22, month: 'May', country: 'travel',
+    city: 'Toronto → Amsterdam',
+    title: 'Departure Day',
+    tags: ['Flight', 'TS376'],
+    activities: [
+      { time: '11:45 PM', name: 'Depart YYZ', note: 'Air Transat TS376 · Confirmation: ON40Y1', dot: 'key' },
+    ],
+    nearby: []
+  },
+  {
+    date: 23, month: 'May', country: 'nl',
+    city: 'Amsterdam',
+    title: 'Arrival & Jordaan Wander',
+    tags: ['Check-in', 'Foodhallen', 'Red Light District'],
+    activities: [
+      { time: '1:10 PM', name: 'Land at Schiphol', note: 'Take NS train to Centraal (~17 min)', dot: 'key' },
+      { time: '~2:30', name: 'Check in · Best Western Dam Square', note: 'Gravenstraat 12–16 · Hold payment on Visa', dot: '' },
+      { time: 'Afternoon', name: 'Jordaan District', note: 'De 9 Straatjes (The 9 Streets) — boutique shopping, local cafés', dot: '' },
+      { time: 'Evening', name: 'Foodhallen', note: 'Indoor street food market, great for first dinner', dot: '' },
+      { time: 'Night', name: 'Red Light District Walk', note: 'Evening stroll — keep belongings close', dot: '' },
+    ],
+    nearby: [
+      { name: 'Westerkerk', type: 'Church · great tower views' },
+      { name: 'Noordermarkt', type: 'Market · Sat mornings' },
+      { name: "Café 't Smalle", type: 'Brown café · canal side' },
+      { name: 'Anne Frank House', type: 'Museum · book ahead' },
+    ]
+  },
+  {
+    date: 24, month: 'May', country: 'nl',
+    city: 'Amsterdam',
+    title: 'Windmills, Cheese & Canal Cruise',
+    tags: ['Zaanse Schans', 'Haarlem', 'Canal Cruise'],
+    activities: [
+      { time: 'Morning', name: 'Zaanse Schans', note: 'Windmills + cheese making demo · 30 min by NS train from Centraal', dot: 'key' },
+      { time: 'Midday', name: 'Haarlem', note: 'Charming smaller city · 20 min from Amsterdam · great lunch stop', dot: '' },
+      { time: 'Afternoon', name: 'Canal Cruise', note: '1-hour cruise · booked via Klook ($38) · no drinks needed on board', dot: 'booked' },
+    ],
+    nearby: [
+      { name: 'Edam', type: 'Village · 30 min · famous cheese market' },
+      { name: 'Volendam', type: 'Fishing village · 30 min NS' },
+      { name: 'Marktplaats Haarlem', type: 'Main square + Grote Kerk' },
+      { name: 'Jopenkerk', type: 'Brewery in church · Haarlem' },
+    ]
+  },
+  {
+    date: 25, month: 'May', country: 'nl',
+    city: 'Amsterdam',
+    title: 'Museum Day & De Pijp',
+    tags: ['Rijksmuseum 12:30', 'Van Gogh 4PM', 'De Pijp'],
+    activities: [
+      { time: 'Morning', name: 'Albert Cuyp Market', note: 'Largest street market in NL · grab lunch before museums', dot: '' },
+      { time: '12:30 PM', name: 'Rijksmuseum', note: 'Timed entry · GetYourGuide booked · allow 2–3 hours', dot: 'booked' },
+      { time: '4:00 PM', name: 'Van Gogh Museum', note: 'Timed entry · 15–30 min buffer allowed · Official website booked', dot: 'booked' },
+      { time: 'Evening', name: 'De Pijp Neighbourhood', note: 'Hip local area · bars, restaurants, great atmosphere', dot: '' },
+    ],
+    nearby: [
+      { name: 'Moco Museum', type: 'Modern art · Banksy collection' },
+      { name: 'Vondelpark', type: 'Park · 5 min walk' },
+      { name: "Café Loetje", type: 'Classic Amsterdam steaks' },
+      { name: 'Heineken Experience', type: 'Brewery museum · 10 min walk' },
+    ]
+  },
+  {
+    date: 26, month: 'May', country: 'be',
+    city: 'Amsterdam → Brussels',
+    title: 'Train to Belgium · Central Brussels',
+    tags: ['Train 11:04 AM', 'Atomium', 'Belgian Beer'],
+    activities: [
+      { time: '11:04 AM', name: 'Train departs Amsterdam Zuid', note: 'ECD 9532 · Track 3 · ~2 hours to Bruxelles Midi', dot: 'key' },
+      { time: '~1:00 PM', name: 'Check in · NH Collection', note: 'Blvd Adolphe Max 7 · 9 min walk from station · Breakfast included', dot: '' },
+      { time: 'Afternoon', name: 'Grand Place & Centre', note: 'UNESCO World Heritage Square · free · very walkable from hotel', dot: '' },
+      { time: 'Afternoon', name: 'Atomium', note: 'Iconic Brussels landmark · book tickets ahead', dot: '' },
+      { time: 'Evening', name: 'Belgian Beer Tasting', note: 'Delirium Café area (2,000+ beers) or Moeder Lambic', dot: '' },
+      { time: 'Evening', name: 'Belgian Chocolate', note: 'Pierre Marcolini or Laurent Gerbaud near Grand Place', dot: '' },
+    ],
+    nearby: [
+      { name: 'Manneken Pis', type: 'Iconic statue · 5 min walk' },
+      { name: 'Galeries Royales', type: 'Beautiful 19c arcade' },
+      { name: 'Royal Palace', type: 'Free entry in summer' },
+      { name: 'Marolles Flea Market', type: 'Antiques · weekends' },
+    ]
+  },
+  {
+    date: 27, month: 'May', country: 'be',
+    city: 'Ghent & Bruges',
+    title: 'Day Trips — Two Medieval Cities',
+    tags: ['Ghent', 'Bruges', 'Day Trip'],
+    activities: [
+      { time: 'Morning', name: 'Train to Ghent', note: '~1 hour from Brussels Midi · book via Omio (€23.80)', dot: '' },
+      { time: 'Ghent', name: 'Gravensteen Castle', note: 'Medieval castle right in the city centre', dot: '' },
+      { time: 'Ghent', name: 'Ghent Altarpiece', note: 'Van Eyck masterpiece at St Bavo Cathedral', dot: '' },
+      { time: 'Midday', name: 'Train Ghent → Bruges', note: '~25 min · book via Omio (€17.80)', dot: '' },
+      { time: 'Bruges', name: 'Bruges Old Town', note: 'UNESCO city centre · Markt Square · Belfry Tower', dot: '' },
+      { time: 'Bruges', name: 'Boat Tour', note: 'Canal boat through medieval city · ~€10', dot: '' },
+      { time: 'Evening', name: 'Return to Brussels', note: 'Bruges → Brussels ~1h (€36 via Omio)', dot: '' },
+    ],
+    nearby: [
+      { name: 'Chocolate Line', type: 'Famous Bruges chocolatier' },
+      { name: 'De Halve Maan Brewery', type: 'Only brewery in Bruges centre' },
+      { name: 'Basilica of Holy Blood', type: 'Reliquary · Bruges' },
+      { name: 'Graslei Quay', type: 'Ghent · most beautiful street' },
+    ]
+  },
+  {
+    date: 28, month: 'May', country: 'fr',
+    city: 'Brussels → Paris',
+    title: 'Paris Arrival · Eiffel Tower Area',
+    tags: ['Train 8:43 AM', 'Eiffel Tower', 'Arc de Triomphe', 'Seine Cruise'],
+    activities: [
+      { time: '7:00 AM', name: 'Arrive Brussels Midi station', note: 'Early! · grab coffee · train 8:43 · ref HTJQMT', dot: 'key' },
+      { time: '10:05 AM', name: 'Arrive Paris Gare du Nord', note: 'Bus ~8 min to Hotel Touring · 21 Rue Buffault', dot: '' },
+      { time: '~11 AM', name: 'Bag drop at hotel', note: 'May be too early for check-in · ask to store bags', dot: '' },
+      { time: 'Noon', name: 'Champ de Mars', note: 'Eiffel Tower viewing area · Carette or Café Carrousel for lunch', dot: '' },
+      { time: 'Afternoon', name: 'Esplanade du Trocadéro', note: 'Best photo spot for Eiffel Tower · across the Seine', dot: '' },
+      { time: 'Afternoon', name: 'Arc de Triomphe', note: 'Top views of Champs-Élysées · book entry in advance', dot: '' },
+      { time: 'Evening', name: 'Champs-Élysées & Galeries Lafayette', note: 'Shopping strip + rooftop terrace at Galeries (free)', dot: '' },
+      { time: 'Dinner', name: "Girafe or L'Enrec\u00f4te", note: "Girafe = pricier with Eiffel views \u00b7 Relais de l'Enrec\u00f4te = classic, one-dish", dot: '' },
+      { time: 'Night', name: 'Seine River Cruise', note: 'Vedettes du Pont Neuf (€30) · evening lights', dot: 'key' },
+    ],
+    nearby: [
+      { name: 'Invalides', type: "Napoleon's tomb · 10 min walk" },
+      { name: 'Rodin Museum', type: 'Garden sculptures · near Invalides' },
+      { name: 'Musée du Quai Branly', type: 'Indigenous art · below Eiffel' },
+      { name: 'Palais de Tokyo', type: 'Contemporary art · Trocadéro' },
+    ]
+  },
+  {
+    date: 29, month: 'May', country: 'fr',
+    city: 'Paris',
+    title: 'Latin Quarter, Marais & Louvre',
+    tags: ['Notre-Dame', 'Sainte-Chapelle', 'Le Marais', 'Louvre 5PM'],
+    activities: [
+      { time: 'Morning', name: 'Jardin du Luxembourg', note: 'Beautiful gardens · Latin Quarter area', dot: '' },
+      { time: 'Morning', name: 'Sainte-Chapelle', note: 'Stunning stained glass · book online (€60) · can be busy', dot: 'booked' },
+      { time: 'Morning', name: 'Notre-Dame Cathedral', note: 'Exterior + Seine walk · still being restored', dot: '' },
+      { time: 'Afternoon', name: 'Le Marais', note: 'Place des Vosges · vintage shops · Revoir Vintage · Charlot St', dot: '' },
+      { time: 'Lunch/snack', name: 'Le Marais Food', note: 'Chez Alain Miam Miam (falafel) · BOBI Filipino · PATATE fries', dot: '' },
+      { time: 'Afternoon', name: 'Palais Royal & Gardens', note: 'Columns de Buren · Galerie Vivienne nearby', dot: '' },
+      { time: '5:00 PM', name: 'Louvre Museum', note: 'Timed entry booked · open to 9:45 PM Fri · allow 3–4 hrs', dot: 'booked' },
+    ],
+    nearby: [
+      { name: 'Centre Pompidou', type: 'Modern art · Le Marais' },
+      { name: 'Île Saint-Louis', type: 'Island · Berthillon ice cream' },
+      { name: 'Shakespeare & Company', type: 'Iconic English bookshop' },
+      { name: 'Place de la Bastille', type: 'History + nightlife area' },
+    ]
+  },
+  {
+    date: 30, month: 'May', country: 'fr',
+    city: 'Paris',
+    title: "Montmartre & Mus\u00e9e d'Orsay",
+    tags: ['Sacré-Cœur', 'Montmartre', 'Orsay or Disney'],
+    activities: [
+      { time: 'Morning', name: 'Basilique du Sacré-Cœur', note: 'Stunning hilltop basilica · free entry · arrive early', dot: '' },
+      { time: 'Morning', name: 'Place du Tertre', note: 'Artists square · just behind Sacré-Cœur', dot: '' },
+      { time: 'Morning', name: 'Rue de l\'Abreuvoir', note: 'Most photographed street in Montmartre', dot: '' },
+      { time: 'Morning', name: 'Fotoautomat Photobooth', note: 'Cute vintage strip photos · keepsake!', dot: '' },
+      { time: 'Brunch', name: 'Pink Mamma or La Maison Rose', note: 'Pink Mamma = trendy Italian · La Maison Rose = classic Montmartre café', dot: '' },
+      { time: 'Afternoon', name: 'Musée d\'Orsay', note: 'Impressionism powerhouse · OR Disneyland Paris if you want a different vibe', dot: '' },
+    ],
+    nearby: [
+      { name: 'Moulin Rouge', type: 'Iconic cabaret · exterior photo' },
+      { name: 'Musée de Montmartre', note: 'Renoir\'s old studio', type: '' },
+      { name: 'Clos Montmartre', type: 'Tiny working vineyard in Paris' },
+      { name: 'Canal Saint-Martin', type: 'Hipster canal area · south of Montmartre' },
+    ]
+  },
+  {
+    date: 31, month: 'May', country: 'fr',
+    city: 'Paris → Toronto',
+    title: 'Au Revoir Paris ✈',
+    tags: ['Depart 12:00 PM', 'CDG'],
+    activities: [
+      { time: 'Morning', name: 'Last breakfast in Paris', note: 'Grab a croissant and café au lait — make it count', dot: '' },
+      { time: 'Morning', name: 'Check out Hotel Touring', note: 'Navigo one-way fare to CDG airport (~€28)', dot: '' },
+      { time: '12:00 PM', name: 'Depart CDG', note: 'Air Transat TS189 · CDG → YYZ · Arrives 2:25 PM Toronto', dot: 'key' },
+    ],
+    nearby: []
+  },
+];
+
+const packingItems = [
+  { name: 'Passport', tag: 'Docs', checked: false },
+  { name: 'Travel insurance docs', tag: 'Docs', checked: false },
+  { name: 'Printed hotel confirmations', tag: 'Docs', checked: false },
+  { name: 'Printed train tickets', tag: 'Docs', checked: false },
+  { name: 'Booking confirmation ON40Y1', tag: 'Docs', checked: false },
+  { name: 'Credit cards (Visa + Amex + KOHO)', tag: 'Money', checked: false },
+  { name: 'Some Euro cash (~€100)', tag: 'Money', checked: false },
+  { name: 'Carry-on only · pack light!', tag: 'Packing', checked: false },
+  { name: 'Comfortable walking shoes', tag: 'Clothes', checked: false },
+  { name: 'Light rain jacket', tag: 'Clothes', checked: false },
+  { name: 'Layers (May = cool evenings)', tag: 'Clothes', checked: false },
+  { name: 'Power adapter (EU Type C/F)', tag: 'Tech', checked: false },
+  { name: 'Portable charger / power bank', tag: 'Tech', checked: false },
+  { name: 'Download offline maps (Amsterdam, Brussels, Paris)', tag: 'Tech', checked: false },
+  { name: 'Phone data plan / SIM sorted', tag: 'Tech', checked: false },
+  { name: 'Arrange Barney care (TG)', tag: 'Pre-trip', checked: false },
+  { name: 'Notify bank of travel', tag: 'Pre-trip', checked: false },
+];
+
+// ─── PACKING LIST RENDER ─────────────────────────────────────
+function renderPackingList() {
+  const container = document.getElementById('packingList');
+  const saved = JSON.parse(localStorage.getItem('packingChecked') || '{}');
+  container.innerHTML = packingItems.map((item, i) => {
+    const checked = saved[i] || false;
+    return `
+      <div class="pack-item" onclick="togglePack(${i})">
+        <div class="pack-check ${checked ? 'checked' : ''}" id="pack-check-${i}"></div>
+        <div class="pack-item-name ${checked ? 'checked' : ''}" id="pack-name-${i}">${item.name}</div>
+        <div class="pack-item-tag">${item.tag}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function togglePack(i) {
+  const saved = JSON.parse(localStorage.getItem('packingChecked') || '{}');
+  saved[i] = !saved[i];
+  localStorage.setItem('packingChecked', JSON.stringify(saved));
+  document.getElementById(`pack-check-${i}`).classList.toggle('checked', saved[i]);
+  document.getElementById(`pack-name-${i}`).classList.toggle('checked', saved[i]);
+}
+
+// ─── ITINERARY RENDER ────────────────────────────────────────
+function renderDayCards(filter = 'all') {
+  const container = document.getElementById('dayCardsContainer');
+  const days = filter === 'all' ? tripDays : tripDays.filter(d => d.country === filter || (filter === 'be' && d.country === 'be') || (filter === 'nl' && d.country === 'nl') || (filter === 'fr' && d.country === 'fr'));
+
+  container.innerHTML = days.map((day, idx) => {
+    const colorClass = day.country === 'be' ? 'brussels' : day.country === 'fr' ? 'paris' : day.country === 'travel' ? 'travel' : '';
+    const tags = day.tags.map(t => `<span class="tag">${t}</span>`).join('');
+    const activities = day.activities.map(a => `
+      <div class="activity-item">
+        <div class="activity-time">${a.time}</div>
+        <div class="activity-dot ${a.dot}"></div>
+        <div>
+          <div class="activity-name">${a.name}</div>
+          ${a.note ? `<div class="activity-note">${a.note}</div>` : ''}
+        </div>
+      </div>
+    `).join('');
+
+    const nearby = day.nearby.length ? `
+      <div class="nearby-section">
+        <div class="nearby-label">Nearby & Worth Knowing</div>
+        <div class="nearby-grid">
+          ${day.nearby.map(n => `
+            <div class="nearby-item">
+              <div class="nearby-item-name">${n.name}</div>
+              <div class="nearby-item-type">${n.type}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    ` : '';
+
+    return `
+      <div class="day-card" data-country="${day.country}">
+        <div class="day-card-header" onclick="toggleDay(this)">
+          <div class="day-card-date ${colorClass}">
+            <div class="day-num">${day.date}</div>
+            <div class="day-mon">${day.month}</div>
+          </div>
+          <div class="day-card-main">
+            <div class="day-card-city">${day.city}</div>
+            <div class="day-card-title">${day.title}</div>
+            <div class="day-card-tags">${tags}</div>
+          </div>
+        </div>
+        <div class="day-card-body">
+          <div class="activity-list">${activities}</div>
+          ${nearby}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleDay(headerEl) {
+  const body = headerEl.closest('.day-card').querySelector('.day-card-body');
+  body.classList.toggle('open');
+}
+
+function filterDays(filter) {
+  document.querySelectorAll('#countryFilter .pill').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  renderDayCards(filter);
+}
+
+// ─── NAV ─────────────────────────────────────────────────────
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleBooking(headerEl) {
+  const detail = headerEl.nextElementSibling;
+  const chevron = headerEl.querySelector('.booking-chevron');
+  detail.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+// ─── TOPBAR DATE + COUNTDOWN ─────────────────────────────────
+function updateTopbar() {
+  const now = new Date();
+  const departure = new Date('2026-05-22T23:45:00');
+  const diff = departure - now;
+  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  document.getElementById('topbarDate').textContent = now.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
+  document.getElementById('topbarCountdown').textContent = days > 0 ? `${days} days to go` : days === 0 ? 'Departing tonight!' : 'Trip is on! 🎉';
+}
+
+// ─── AI CHAT ─────────────────────────────────────────────────
+const TRIP_CONTEXT = `You are a knowledgeable travel assistant for Boon and his girlfriend TG (Tricia) who are on a Europe trip May 23–31 2026. Here is their complete itinerary and context:
+
+CITIES: Amsterdam (May 23–26), Brussels (May 26–28), Ghent & Bruges day trip (May 27), Paris (May 28–31).
+
+HOTELS: Best Western Dam Square Inn Amsterdam (breakfast included), NH Collection Brussels Centre (breakfast included, 9 min from station), Hotel Touring Paris 21 Rue Buffault 75009 (no breakfast, 8 min from Gare du Nord by bus).
+
+KEY BOOKINGS: Rijksmuseum 12:30 PM May 25, Van Gogh Museum 4 PM May 25, Louvre 5 PM May 29, Canal cruise via Klook ~May 24.
+
+TRANSPORT: Amsterdam ECD 9532 May 26 11:04 AM → Brussels. Brussels→Paris Train 9414 ref HTJQMT May 28 08:43 arrive 10:05. Must arrive Brussels station by 7 AM.
+
+FOOD BUDGET: ~€100/day for both. Amsterdam hotel has breakfast. 
+
+INTERESTS: Local neighbourhood exploration, museums, food markets, canals, history, vintage shopping, photography (Rue de l'Abreuvoir Montmartre, Trocadéro Eiffel shots). TG is the main planner. Boon has KOHO card.
+
+PET: They have a dog named Barney who needs to be arranged before the trip.
+
+Be warm, concise, and practical. Give specific names, not generic advice. Reference their actual itinerary when relevant. Keep answers short for mobile reading.`;
+
+let chatHistory = [];
+let isLoading = false;
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 90) + 'px';
+}
+
+function handleChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+}
+
+function sendSuggestion(btn) {
+  document.getElementById('chatInput').value = btn.textContent;
+  document.getElementById('chatSuggestions').style.display = 'none';
+  sendChat();
+}
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg || isLoading) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+  isLoading = true;
+  document.getElementById('chatSendBtn').disabled = true;
+
+  appendBubble(msg, 'user');
+  chatHistory.push({ role: 'user', content: msg });
+
+  const loadingEl = appendBubble('Thinking…', 'loading');
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: TRIP_CONTEXT,
+        messages: chatHistory
+      })
+    });
+
+    const data = await response.json();
+    const reply = data.content?.[0]?.text || 'Sorry, I couldn\'t get a response. Try again!';
+
+    loadingEl.remove();
+    appendBubble(reply, 'assistant');
+    chatHistory.push({ role: 'assistant', content: reply });
+
+  } catch (err) {
+    loadingEl.remove();
+    appendBubble('Network error — check your connection and try again.', 'assistant');
+  }
+
+  isLoading = false;
+  document.getElementById('chatSendBtn').disabled = false;
+}
+
+function appendBubble(text, type) {
+  const area = document.getElementById('chatArea');
+  const el = document.createElement('div');
+  el.className = `chat-bubble ${type}`;
+  el.textContent = text;
+  area.appendChild(el);
+  el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  return el;
+}
+
+// ─── INIT ─────────────────────────────────────────────────────
+updateTopbar();
+renderDayCards();
+renderPackingList();
+</script>
+</body>
+</html>
