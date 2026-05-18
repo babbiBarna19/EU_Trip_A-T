@@ -6,8 +6,10 @@
 <title>Europe 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+function onGoogleMapsReady() { window.googleMapsReady = true; }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCq1mqHAFozfQr8UWXrrUzDMZ5SvZdiCk&callback=onGoogleMapsReady&loading=async" async defer></script>
 <style>
   :root {
     --cream: #F5EFE4;
@@ -290,7 +292,7 @@
   }
   .day-card-title {
     font-family: 'Playfair Display', serif;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
     line-height: 1.3;
     color: var(--ink);
@@ -302,7 +304,7 @@
     margin-top: 8px;
   }
   .tag {
-    font-size: 10px;
+    font-size: 11px;
     padding: 3px 9px;
     border-radius: 20px;
     background: var(--cream);
@@ -338,16 +340,16 @@
     padding-top: 1px;
   }
   .activity-name {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     color: var(--ink);
     line-height: 1.3;
   }
   .activity-note {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--muted);
     margin-top: 2px;
-    line-height: 1.4;
+    line-height: 1.5;
   }
   .activity-dot {
     width: 7px;
@@ -384,13 +386,13 @@
     padding: 10px;
   }
   .nearby-item-name {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
     color: var(--ink);
     line-height: 1.3;
   }
   .nearby-item-type {
-    font-size: 10px;
+    font-size: 11px;
     color: var(--muted);
     margin-top: 2px;
   }
@@ -465,16 +467,16 @@
     margin-right: 12px;
   }
   .budget-row-name { flex: 1; }
-  .budget-row-title { font-size: 13px; font-weight: 500; color: var(--ink); }
-  .budget-row-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .budget-row-title { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .budget-row-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
   .budget-row-amount {
     font-family: 'DM Mono', monospace;
-    font-size: 13px;
+    font-size: 14px;
     color: var(--ink);
     text-align: right;
   }
   .budget-row-status {
-    font-size: 9px;
+    font-size: 10px;
     margin-top: 2px;
     text-align: right;
   }
@@ -525,8 +527,8 @@
     flex-shrink: 0;
   }
   .booking-info { flex: 1; }
-  .booking-title { font-size: 14px; font-weight: 500; color: var(--ink); }
-  .booking-subtitle { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .booking-title { font-size: 15px; font-weight: 500; color: var(--ink); }
+  .booking-subtitle { font-size: 12px; color: var(--muted); margin-top: 2px; }
   .booking-chevron {
     font-size: 16px;
     color: var(--muted);
@@ -553,13 +555,13 @@
   .booking-detail-row {
     display: flex;
     justify-content: space-between;
-    padding: 7px 0;
+    padding: 8px 0;
     border-bottom: 1px solid var(--border);
-    font-size: 12px;
+    font-size: 13px;
   }
   .booking-detail-row:last-child { border-bottom: none; }
-  .booking-detail-key { color: var(--muted); }
-  .booking-detail-val { font-weight: 500; color: var(--ink); text-align: right; }
+  .booking-detail-key { color: var(--muted); font-size: 12px; }
+  .booking-detail-val { font-weight: 500; color: var(--ink); text-align: right; font-size: 13px; }
 
   /* ─── AI CHAT ─── */
   .chat-area {
@@ -573,8 +575,8 @@
     max-width: 85%;
     padding: 10px 14px;
     border-radius: 16px;
-    font-size: 13px;
-    line-height: 1.5;
+    font-size: 14px;
+    line-height: 1.6;
   }
   .chat-bubble.assistant {
     background: var(--card-bg);
@@ -682,7 +684,7 @@
   .tip-title { font-size: 13px; font-weight: 600; color: var(--ink); }
   .tip-subtitle { font-size: 11px; color: var(--muted); }
   .tip-item {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--ink);
     padding: 6px 0;
     border-bottom: 1px solid var(--border);
@@ -715,7 +717,7 @@
   }
   .pack-check.checked { background: var(--sage); border-color: var(--sage); }
   .pack-check.checked::after { content: '✓'; color: white; font-size: 11px; font-weight: 700; }
-  .pack-item-name { font-size: 13px; color: var(--ink); flex: 1; }
+  .pack-item-name { font-size: 14px; color: var(--ink); flex: 1; }
   .pack-item-name.checked { text-decoration: line-through; color: var(--muted); }
   .pack-item-tag {
     font-size: 9px;
@@ -761,11 +763,9 @@
   .empty-state-icon { font-size: 32px; margin-bottom: 10px; }
 
   /* ─── MAP PAGE ─── */
-  #mapContainer { height: 350px; width: 100%; z-index: 1; }
-  .leaflet-popup-content { font-family: "DM Sans", sans-serif; font-size: 12px; line-height: 1.5; min-width: 160px; }
-  .leaflet-popup-content strong { font-size: 13px; color: #1A1612; display: block; margin-bottom: 3px; }
-  .leaflet-popup-content .pop-note { color: #7A7068; font-size: 11px; }
-  .leaflet-popup-content .pop-link { display: inline-block; margin-top: 7px; background: #C4622D; color: white; padding: 5px 10px; border-radius: 20px; font-size: 11px; text-decoration: none; }
+  #mapContainer { height: 370px; width: 100%; z-index: 1; }
+  .gm-style .gm-style-iw-c { border-radius: 12px !important; padding: 12px !important; }
+  .gm-style .gm-style-iw-d { overflow: hidden !important; }
   .map-offline-note { background: #FFF8EC; border-left: 3px solid #C9A84C; margin: 10px 16px; padding: 10px 12px; border-radius: 0 8px 8px 0; font-size: 11px; color: #7A7068; line-height: 1.5; }
   .map-offline-note strong { color: #1A1612; }
   .loc-list { padding: 0 16px 10px; }
@@ -774,8 +774,8 @@
   .loc-item:active { opacity: 0.7; }
   .loc-emoji { font-size: 18px; width: 32px; text-align: center; flex-shrink: 0; }
   .loc-info { flex: 1; }
-  .loc-name { font-size: 13px; font-weight: 500; color: #1A1612; }
-  .loc-type { font-size: 10px; color: #7A7068; margin-top: 1px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .loc-name { font-size: 14px; font-weight: 500; color: #1A1612; }
+  .loc-type { font-size: 11px; color: #7A7068; margin-top: 1px; text-transform: uppercase; letter-spacing: 0.06em; }
   .loc-maps-btn { font-size: 10px; color: #C4622D; text-decoration: none; background: #FEF3EC; padding: 4px 9px; border-radius: 12px; white-space: nowrap; flex-shrink: 0; }
 
   /* ─── EXPENSE LOGGER ─── */
@@ -800,8 +800,8 @@
   .expense-log-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--border); background: white; }
   .expense-log-emoji { font-size: 16px; width: 28px; text-align: center; }
   .expense-log-info { flex: 1; }
-  .expense-log-note { font-size: 13px; color: var(--ink); }
-  .expense-log-cat { font-size: 10px; color: var(--muted); margin-top: 1px; }
+  .expense-log-note { font-size: 14px; color: var(--ink); }
+  .expense-log-cat { font-size: 11px; color: var(--muted); margin-top: 1px; }
   .expense-log-amount { font-family: "DM Mono", monospace; font-size: 13px; color: var(--ink); }
   .expense-log-del { background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 4px; }
   .expense-progress { margin: 0 16px 12px; background: var(--cream); border-radius: 12px; padding: 12px 14px; }
@@ -810,6 +810,11 @@
   .expense-progress-fill { height: 100%; background: var(--sage); border-radius: 3px; transition: width 0.4s ease; }
   .expense-progress-fill.over { background: var(--accent); }
   .expense-empty { text-align: center; padding: 24px; color: var(--muted); font-size: 12px; }
+
+
+  .tip-card { transition: opacity 0.2s; }
+  .tip-card.hidden { display: none; }
+  .section-label.hidden { display: none; }
 
 </style>
 </head>
@@ -1409,86 +1414,174 @@
 <!-- ═══════════ PAGE: TIPS & PACKING ═══════════ -->
 <div class="page" id="page-tips">
 
-  <div class="section-label">Essential Tips</div>
-
-  <div class="tip-card">
-    <div class="tip-card-header">
-      <div class="tip-icon">🚆</div>
-      <div>
-        <div class="tip-title">Train Travel</div>
-        <div class="tip-subtitle">Getting around Europe</div>
-      </div>
-    </div>
-    <div class="tip-item">Individual NS tickets cheaper than day pass for windmill area — one-way is best</div>
-    <div class="tip-item">Credit card tap works on Amsterdam GVB trams/metro</div>
-    <div class="tip-item">Belgian day trips: train is ~half the price of bus tours</div>
-    <div class="tip-item">Arrive Brussels station by 7:00 AM for 8:43 train to Paris</div>
-    <div class="tip-item">Book Paris transport passes closer to departure — multiple options available</div>
+  <div class="pill-toggle" id="tipsCityFilter" style="padding-bottom:10px;">
+    <button class="pill active" onclick="filterTips('all', this)">All Tips</button>
+    <button class="pill" onclick="filterTips('nl', this)">🇳🇱 Amsterdam</button>
+    <button class="pill" onclick="filterTips('be', this)">🇧🇪 Belgium</button>
+    <button class="pill" onclick="filterTips('fr', this)">🇫🇷 Paris</button>
+    <button class="pill" onclick="filterTips('general', this)">✈️ General</button>
   </div>
 
-  <div class="tip-card">
+  <!-- AMSTERDAM TIPS -->
+  <div class="tip-card tips-nl tips-all">
     <div class="tip-card-header">
-      <div class="tip-icon">🍽️</div>
-      <div>
-        <div class="tip-title">Food & Eating</div>
-        <div class="tip-subtitle">Budget ~€100/day for both</div>
-      </div>
+      <div class="tip-icon">🚇</div>
+      <div><div class="tip-title">Amsterdam · Getting Around</div><div class="tip-subtitle">Transport that actually works</div></div>
     </div>
-    <div class="tip-item">Amsterdam breakfast included at Best Western — use it</div>
-    <div class="tip-item">Brussels & Paris breakfast also included at your hotels</div>
-    <div class="tip-item">Albert Cuyp market: 13-min walk from museum area, great cheap lunch</div>
-    <div class="tip-item">Jordaan: local cafés, much less touristy pricing vs. Dam Square</div>
-    <div class="tip-item">Paris: Relais de l'Entrecôte is single-dish, quick, and excellent value</div>
-    <div class="tip-item">Le Marais: Chez Alain Miam Miam, BOBI Filipino, PATATE for casual eats</div>
+    <div class="tip-item">From Schiphol: take the NS train to Amsterdam Centraal — 17 min, ~€5. Skip taxis, they're expensive.</div>
+    <div class="tip-item">Credit card tap works on GVB trams and metro — tap in AND tap out or you get charged the max fare.</div>
+    <div class="tip-item">For Zaanse Schans: buy a one-way NS ticket (~€4 each way), not a day pass — it's cheaper for a single trip out of the city.</div>
+    <div class="tip-item">Bikes have absolute right of way — always look both ways before stepping off a curb. Tram tracks are also a hazard for ankles.</div>
+    <div class="tip-item">The GVB app shows real-time tram/metro arrivals and lets you plan routes easily.</div>
   </div>
 
-  <div class="tip-card">
+  <div class="tip-card tips-nl tips-all">
     <div class="tip-card-header">
-      <div class="tip-icon">🎒</div>
-      <div>
-        <div class="tip-title">Logistics</div>
-        <div class="tip-subtitle">Day-to-day essentials</div>
-      </div>
+      <div class="tip-icon">🧀</div>
+      <div><div class="tip-title">Amsterdam · Food & Culture</div><div class="tip-subtitle">Eat like a local, not a tourist</div></div>
     </div>
-    <div class="tip-item">One carry-on recommended — makes train travel much easier</div>
-    <div class="tip-item">Book second-class trains — keep bags close, especially in Paris</div>
-    <div class="tip-item">Amsterdam: tap credit card on entry/exit of metro, not just entry</div>
-    <div class="tip-item">Van Gogh allows 15–30 min buffer before your timed slot</div>
-    <div class="tip-item">Louvre on Fridays open until 9:45 PM — great for 5 PM entry</div>
-    <div class="tip-item">Barney arrangement: TG to handle before departure</div>
+    <div class="tip-item">Albert Cuyp Market is the real deal — cheese, stroopwafels, fresh herring, Dutch pancakes. Way cheaper than tourist spots near Dam Square.</div>
+    <div class="tip-item">"Coffee shops" sell cannabis (18+, ID required). "Cafés" or "eetcafé" are for actual coffee and food — know the difference.</div>
+    <div class="tip-item">Jordaan neighbourhood cafés are 25–35% cheaper than anything near Dam Square — and far more atmospheric.</div>
+    <div class="tip-item">Try a broodje haring (raw herring sandwich) from a street stall — it's a quintessential Amsterdam experience and costs ~€3.</div>
+    <div class="tip-item">Most places accept card. Keep €20–30 cash for markets and smaller canal-side cafés.</div>
+    <div class="tip-item">Floating Flower Market (Bloemenmarkt) is tourist-facing but worth a quick stroll — it's on a canal, 5 min from Rijksmuseum.</div>
   </div>
 
-  <div class="tip-card">
+  <div class="tip-card tips-nl tips-all">
     <div class="tip-card-header">
-      <div class="tip-icon">💶</div>
-      <div>
-        <div class="tip-title">Money</div>
-        <div class="tip-subtitle">Cards & cash</div>
-      </div>
+      <div class="tip-icon">🎨</div>
+      <div><div class="tip-title">Amsterdam · Museums & Sights</div><div class="tip-subtitle">Get the most out of your bookings</div></div>
     </div>
-    <div class="tip-item">KOHO card: good for travel spending, no FX fees</div>
-    <div class="tip-item">Amsterdam Best Western: put hold on Visa for hotel fee</div>
-    <div class="tip-item">Most attractions and restaurants take card — keep €50–80 cash for markets</div>
-    <div class="tip-item">Bruges boat tour: may be cash only at dock</div>
+    <div class="tip-item">Rijksmuseum: aim for the Night Watch first (main hall, 2nd floor) — crowds build up as the day goes on. 2–3 hrs is ideal.</div>
+    <div class="tip-item">Van Gogh Museum: 15–30 min early arrival is fine. The self-portrait room gets packed — go there first. Audio guide is worth it.</div>
+    <div class="tip-item">Anne Frank House tickets often sell out weeks ahead — but you have yours. Arrive 10 min early and have your confirmation ready.</div>
+    <div class="tip-item">The I Amsterdam sign near Rijksmuseum is popular for photos — best angle is from across the reflecting pool, early morning or late afternoon for light.</div>
+    <div class="tip-item">Canals are most beautiful in the golden hour (7–9 PM in late May) — great evening walk in Jordaan after the museums.</div>
   </div>
 
-  <div class="tip-card">
+  <!-- BELGIUM TIPS -->
+  <div class="tip-card tips-be tips-all">
+    <div class="tip-card-header">
+      <div class="tip-icon">🇧🇪</div>
+      <div><div class="tip-title">Belgium · Key Things to Know</div><div class="tip-subtitle">Brussels, Ghent & Bruges</div></div>
+    </div>
+    <div class="tip-item">Belgium has 3 official languages — French in Brussels, Dutch (Flemish) in Ghent/Bruges. Train stations show both names: Bruges = Brugge, Ghent = Gent. Check both spellings on boards.</div>
+    <div class="tip-item">Brussels is very walkable from your hotel — Grand Place, Manneken Pis, and Rue Neuve shopping are all under 10 min on foot.</div>
+    <div class="tip-item">Brussels Midi (your station) is the main international hub. Brussels Central and Brussels North are different stations — don't confuse them.</div>
+    <div class="tip-item">Day trip trains: no advance booking needed for Brussels → Ghent → Bruges — just buy at the station or SNCB app on the day.</div>
+    <div class="tip-item">Most shops and some restaurants close on Sundays, even in tourist areas. Plan meals accordingly.</div>
+    <div class="tip-item">Around Gare du Midi, move through quickly and keep bags close — it can be rough around the station perimeter at night.</div>
+  </div>
+
+  <div class="tip-card tips-be tips-all">
+    <div class="tip-card-header">
+      <div class="tip-icon">🍺</div>
+      <div><div class="tip-title">Belgium · Food & Drink</div><div class="tip-subtitle">The real Belgian experience</div></div>
+    </div>
+    <div class="tip-item">Belgian beer: each beer has its own specific glass — this is taken seriously. Never take the glass home from a bar (seriously, it's not done).</div>
+    <div class="tip-item">Don't eat waffles or moules-frites right on Grand Place — walk 2 blocks away and prices drop significantly, quality goes up.</div>
+    <div class="tip-item">Pierre Marcolini is the gold standard for chocolate in Brussels — he selects his own cocoa beans. Near Grand Place.</div>
+    <div class="tip-item">Delirium Café has 2,000+ beers and holds a Guinness World Record — fun atmosphere, just watch your tab.</div>
+    <div class="tip-item">In Bruges: De Halve Maan is the only working brewery in the city centre — the tour is worth it, ends with a free beer.</div>
+    <div class="tip-item">Chocolate Line in Bruges is creative and unusual — try the wasabi or bacon chocolate if you're feeling adventurous.</div>
+  </div>
+
+  <!-- PARIS TIPS -->
+  <div class="tip-card tips-fr tips-all">
+    <div class="tip-card-header">
+      <div class="tip-icon">🚇</div>
+      <div><div class="tip-title">Paris · Metro in 2026</div><div class="tip-subtitle">Big changes since 2024 — read this</div></div>
+    </div>
+    <div class="tip-item">Paper tickets are completely gone as of 2025. You need a Navigo Easy card (€2 for the card, load tickets onto it) or use the Bonjour RATP app on your phone.</div>
+    <div class="tip-item">Metro directions are named by the last station on the line, not your destination. Download Citymapper — it tells you exactly which direction to go.</div>
+    <div class="tip-item">From Gare du Nord to Hotel Touring: take Metro Line 4 towards Montrouge, 2 stops to Cadet or Poissonnière. About 5 min.</div>
+    <div class="tip-item">For CDG airport return: take RER B from Gare du Nord (~€11.80, 35 min). Do not take a taxi — flat rate is €56 and Uber often surges to €80+.</div>
+    <div class="tip-item">Validate your ticket every time you enter — inspectors appear without warning and fines are on the spot.</div>
+    <div class="tip-item">Screenshot your Citymapper directions before going underground — many stations have spotty signal.</div>
+  </div>
+
+  <div class="tip-card tips-fr tips-all">
+    <div class="tip-card-header">
+      <div class="tip-icon">🗼</div>
+      <div><div class="tip-title">Paris · Sights & Timing</div><div class="tip-subtitle">Beat the crowds at each spot</div></div>
+    </div>
+    <div class="tip-item">Trocadéro is the best Eiffel Tower photo spot — cross the Seine and shoot from the esplanade. Evening light (7–9 PM in May) is golden. At night the tower sparkles on the hour.</div>
+    <div class="tip-item">Sacré-Cœur: arrive before 9 AM to have the steps mostly to yourself and catch the morning light over Paris. It's magical.</div>
+    <div class="tip-item">Louvre at 5 PM is genuinely smart — crowds thin out significantly. The museum stays open until 9:45 PM on Fridays. Mona Lisa is in Salle 711 (Room 711), Denon Wing.</div>
+    <div class="tip-item">Notre-Dame exterior is stunning even during restoration — the Seine walk around Île de la Cité is one of the best in Paris.</div>
+    <div class="tip-item">Galeries Lafayette rooftop terrace is completely free — great 360° city view including Eiffel Tower. Go up via the 7th floor lift.</div>
+    <div class="tip-item">Rue de l'Abreuvoir in Montmartre: best in early morning before 9 AM — no crowds, beautiful light, very photogenic.</div>
+  </div>
+
+  <div class="tip-card tips-fr tips-all">
+    <div class="tip-card-header">
+      <div class="tip-icon">🥐</div>
+      <div><div class="tip-title">Paris · Food Rules</div><div class="tip-subtitle">Eat well, spend less</div></div>
+    </div>
+    <div class="tip-item">Always say "Bonjour Madame/Monsieur" when entering any shop, café, or restaurant. Not doing this is considered rude — it genuinely changes how you're treated.</div>
+    <div class="tip-item">Walk 2–3 blocks from any major tourist sight and prices drop 40–60%. The best food is almost never on the tourist strip.</div>
+    <div class="tip-item">Lunch is the main meal in France — many good restaurants do a "plat du jour" (dish of the day) for €12–15 that costs €25+ at dinner.</div>
+    <div class="tip-item">Tipping: not expected the way it is in Canada. Round up or leave €2–3 for good service — that's generous by local standards.</div>
+    <div class="tip-item">Bakeries open from 7 AM — grab a croissant (plain, not almond) and café au lait for under €4. Best cheap breakfast in the world.</div>
+    <div class="tip-item">No breakfast on Sundays at Hotel Touring (May 31 checkout day) — head to any nearby boulangerie for a final French breakfast.</div>
+  </div>
+
+  <!-- GENERAL TIPS -->
+  <div class="tip-card tips-general tips-all">
+    <div class="tip-card-header">
+      <div class="tip-icon">🔒</div>
+      <div><div class="tip-title">Safety Across All 3 Countries</div><div class="tip-subtitle">What actually matters</div></div>
+    </div>
+    <div class="tip-item">Pickpocketing is the main risk everywhere — not violent crime. Use a cross-body bag or keep wallet in a front pocket. Never in a back pocket.</div>
+    <div class="tip-item">Paris scams to know: friendship bracelet (someone ties it on your wrist, demands payment — say "Non" firmly and walk away), petition signers, three-cup game. If a stranger approaches you, 99% chance it's a scam.</div>
+    <div class="tip-item">On trains and metro: sit away from the doors. Phone theft at doors ("grab and go") is the most common theft on public transport.</div>
+    <div class="tip-item">Keep a photo of your passport, both sides of all cards, and hotel addresses saved offline on your phone.</div>
+    <div class="tip-item">Emergency number across all EU countries: 112. Works everywhere, even without a SIM card.</div>
+    <div class="tip-item">Canadian Embassy Brussels: +32 2 741 0611. Canadian Embassy Paris: +33 1 44 43 29 00.</div>
+  </div>
+
+  <div class="tip-card tips-general tips-all">
+    <div class="tip-card-header">
+      <div class="tip-icon">💳</div>
+      <div><div class="tip-title">Money & Cards</div><div class="tip-subtitle">For this specific trip</div></div>
+    </div>
+    <div class="tip-item">KOHO card is great for travel — no foreign transaction fees. Use it as your main spending card.</div>
+    <div class="tip-item">Keep €50–80 cash at all times — markets, canal boat tours, some Bruges attractions, and small cafés are often cash-only or have card minimums.</div>
+    <div class="tip-item">Best Western Amsterdam: payment is due at check-in. Put the hold on Visa as planned — don't let the card expire or hit its limit beforehand.</div>
+    <div class="tip-item">Amex acceptance in Europe is only 70–80%. Always have a Visa or Mastercard as backup.</div>
+    <div class="tip-item">Use bank ATMs in busy, well-lit locations only. Avoid standalone ATMs at tourist attractions — higher fees and occasional skimmers.</div>
+    <div class="tip-item">Notify your bank before departure (especially for cards not yet flagged for Europe travel).</div>
+  </div>
+
+  <div class="tip-card tips-general tips-all">
     <div class="tip-card-header">
       <div class="tip-icon">🗣️</div>
-      <div>
-        <div class="tip-title">Useful Phrases</div>
-        <div class="tip-subtitle">Dutch · French</div>
-      </div>
+      <div><div class="tip-title">Useful Phrases</div><div class="tip-subtitle">Dutch · French · Belgian French</div></div>
     </div>
-    <div class="tip-item">Dank je wel (Thank you) · Alsjeblieft (Please/Here you go) · Hoeveel kost het? (How much?)</div>
-    <div class="tip-item">Merci beaucoup · S'il vous plaît · L'addition, s'il vous plaît (The bill, please)</div>
-    <div class="tip-item">Où est…? (Where is…?) · Un café, s'il vous plaît · Parlez-vous anglais?</div>
+    <div class="tip-item">🇳🇱 Dank je wel (DANK-yuh-vel) — Thank you · Alsjeblieft (ALS-yuh-bleeft) — Please / Here you go · Hoeveel kost het? — How much is it?</div>
+    <div class="tip-item">🇳🇱 Waar is…? — Where is…? · De rekening alsjeblieft — The bill please · Spreekt u Engels? — Do you speak English?</div>
+    <div class="tip-item">🇫🇷 Bonjour / Bonsoir — Hello (day) / Hello (evening) · Merci beaucoup — Thank you very much · S'il vous plaît — Please</div>
+    <div class="tip-item">🇫🇷 L'addition, s'il vous plaît — The bill, please · Où est…? — Where is…? · Parlez-vous anglais? — Do you speak English?</div>
+    <div class="tip-item">🇫🇷 Un café, s'il vous plaît — A coffee please · Une bière, s'il vous plaît — A beer please · C'est combien? — How much is it?</div>
   </div>
 
-  <div class="section-label">Packing List</div>
-  <div class="budget-group" id="packingList">
-    <!-- Generated by JS -->
+  <div class="tip-card tips-general tips-all">
+    <div class="tip-card-header">
+      <div class="tip-icon">📱</div>
+      <div><div class="tip-title">Apps & Tech</div><div class="tip-subtitle">Download before you leave Toronto</div></div>
+    </div>
+    <div class="tip-item">Citymapper — best navigation app for Amsterdam, Brussels & Paris. Works offline with downloaded city maps.</div>
+    <div class="tip-item">Google Maps — download offline maps for all 3 cities before leaving (search city → ⋮ → Download offline map).</div>
+    <div class="tip-item">Maps.me — fully offline, free, covers all of Europe. Great backup when you have no data.</div>
+    <div class="tip-item">Bonjour RATP — official Paris metro app. Load your Navigo tickets directly on your phone (iPhone compatible).</div>
+    <div class="tip-item">SNCB app — for Belgian trains. Good for checking Ghent/Bruges day trip schedules on the fly.</div>
+    <div class="tip-item">XE Currency — quick EUR/CAD converter. Works offline once loaded.</div>
+    <div class="tip-item">WhatsApp — make sure both of you have data or WiFi calling set up. Hotel WiFi is free at all 3 of your hotels.</div>
   </div>
+
+  <div class="section-label tips-general tips-all">Packing List</div>
+  <div class="budget-group tips-general tips-all" id="packingList"></div>
 
   <div style="height:10px"></div>
 </div>
@@ -1897,7 +1990,7 @@ async function sendChat() {
   const loadingEl = appendBubble('Thinking…', 'loading');
 
   // 👇 Replace with your Cloudflare Worker URL after deploying
-  const PROXY_URL = 'https://eubarnatrip.boonbabbi.workers.dev';
+  const PROXY_URL = 'https://YOUR_WORKER.YOUR_SUBDOMAIN.workers.dev';
 
   try {
     const response = await fetch(PROXY_URL, {
@@ -2021,24 +2114,43 @@ const cityData = {
   }
 };
 
-let leafletMap = null;
-let mapMarkers = [];
+let googleMap = null;
+let googleMarkers = [];
+let googleInfoWindow = null;
 let mapInitialized = false;
 let currentCity = 'amsterdam';
 
+function markerColor(type) {
+  var c = {
+    'Your Hotel': '#C4622D', 'Museum': '#3D5A7A', 'Museum · Booked': '#3D5A7A',
+    'Food': '#C9A84C', 'Food Market': '#C9A84C', 'Food Hall': '#C9A84C', 'Chocolate': '#C9A84C',
+    'Transport': '#7A7068', 'Attraction': '#5C8A5A', 'Photo Spot': '#5C4A7A',
+    'Day Trip': '#5C8A5A', 'Activity': '#5C8A5A', 'Shopping': '#E8956A',
+    'Park': '#5C8A5A', 'Neighbourhood': '#5C8A5A'
+  };
+  return c[type] || '#C4622D';
+}
+
 function initMap() {
-  if (mapInitialized) {
-    leafletMap.invalidateSize();
-    return;
-  }
-  leafletMap = L.map('mapContainer', { zoomControl: true, attributionControl: false }).setView([52.3741, 4.8982], 14);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(leafletMap);
+  if (!window.googleMapsReady) { setTimeout(initMap, 150); return; }
+  if (mapInitialized) { google.maps.event.trigger(googleMap, 'resize'); return; }
+  googleMap = new google.maps.Map(document.getElementById('mapContainer'), {
+    center: { lat: 52.3741, lng: 4.8982 },
+    zoom: 14,
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: false,
+    zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER },
+    gestureHandling: 'greedy',
+    styles: [{ featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }] }]
+  });
+  googleInfoWindow = new google.maps.InfoWindow({ maxWidth: 220 });
   mapInitialized = true;
   renderMapCity('amsterdam');
 }
 
 function switchCity(city, btn) {
-  document.querySelectorAll('#mapCityFilter .pill').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('#mapCityFilter .pill').forEach(function(p) { p.classList.remove('active'); });
   btn.classList.add('active');
   currentCity = city;
   document.getElementById('mapCityLabel').textContent = cityData[city].label;
@@ -2046,45 +2158,51 @@ function switchCity(city, btn) {
 }
 
 function renderMapCity(city) {
-  mapMarkers.forEach(m => m.remove());
-  mapMarkers = [];
-  const data = cityData[city];
-  // Brussels has a wrong center y coordinate — fix it
-  const center = city === 'brussels' ? [50.8503, 4.3517] : data.center;
-  leafletMap.flyTo(center, data.zoom, { duration: 1 });
-  data.places.forEach((place, i) => {
-    const icon = L.divIcon({
-      html: '<div style="font-size:20px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.3))">' + place.icon + '</div>',
-      className: '',
-      iconSize: [28, 28],
-      iconAnchor: [14, 14]
+  googleMarkers.forEach(function(m) { m.setMap(null); });
+  googleMarkers = [];
+  googleInfoWindow.close();
+  var data = cityData[city];
+  var center = city === 'brussels' ? { lat: 50.8503, lng: 4.3517 } : { lat: data.center[0], lng: data.center[1] };
+  googleMap.panTo(center);
+  googleMap.setZoom(data.zoom);
+  data.places.forEach(function(place, i) {
+    var color = markerColor(place.type);
+    var marker = new google.maps.Marker({
+      position: { lat: place.lat, lng: place.lng },
+      map: googleMap,
+      title: place.name,
+      icon: {
+        path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
+        fillColor: color,
+        fillOpacity: 1,
+        strokeColor: '#fff',
+        strokeWeight: 1.5,
+        scale: 2,
+        anchor: new google.maps.Point(12, 22)
+      }
     });
-    const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + place.lat + ',' + place.lng;
-    const marker = L.marker([place.lat, place.lng], { icon }).addTo(leafletMap);
-    marker.bindPopup('<strong>' + place.name + '</strong><div class="pop-note">' + place.note + '</div><a href="' + mapsUrl + '" target="_blank" class="pop-link">Open in Google Maps</a>');
-    mapMarkers.push(marker);
+    var mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + place.lat + ',' + place.lng;
+    var content = '<div style="font-family:DM Sans,sans-serif;padding:2px 0">' +
+      '<div style="font-size:22px;margin-bottom:5px">' + place.icon + '</div>' +
+      '<div style="font-size:14px;font-weight:600;color:#1A1612;margin-bottom:4px">' + place.name + '</div>' +
+      '<div style="font-size:12px;color:#7A7068;margin-bottom:10px;line-height:1.4">' + place.note + '</div>' +
+      '<a href="' + mapsUrl + '" target="_blank" style="background:#C4622D;color:white;padding:6px 14px;border-radius:20px;font-size:12px;text-decoration:none;display:inline-block">Open in Google Maps ↗</a>' +
+      '</div>';
+    marker.addListener('click', function() {
+      googleInfoWindow.setContent(content);
+      googleInfoWindow.open(googleMap, marker);
+    });
+    googleMarkers.push(marker);
   });
   renderLocationList(city);
 }
 
-function renderLocationList(city) {
-  const container = document.getElementById('locationList');
-  const places = cityData[city].places;
-  container.innerHTML = places.map((p, i) => {
-    const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + p.lat + ',' + p.lng;
-    return '<div class="loc-item" onclick="flyToMarker(' + i + ')">' +
-      '<div class="loc-emoji">' + p.icon + '</div>' +
-      '<div class="loc-info"><div class="loc-name">' + p.name + '</div><div class="loc-type">' + p.type + '</div></div>' +
-      '<a href="' + mapsUrl + '" target="_blank" class="loc-maps-btn" onclick="event.stopPropagation()">Maps</a>' +
-      '</div>';
-  }).join('');
-}
-
 function flyToMarker(i) {
   if (!mapInitialized) return;
-  const place = cityData[currentCity].places[i];
-  leafletMap.flyTo([place.lat, place.lng], 16, { duration: 0.8 });
-  setTimeout(() => mapMarkers[i].openPopup(), 900);
+  var place = cityData[currentCity].places[i];
+  googleMap.panTo({ lat: place.lat, lng: place.lng });
+  googleMap.setZoom(16);
+  setTimeout(function() { google.maps.event.trigger(googleMarkers[i], 'click'); }, 300);
 }
 
 // ─── EXPENSE LOGGER ──────────────────────────────────────────
@@ -2159,6 +2277,21 @@ function renderExpenses() {
 }
 
 renderExpenses();
+
+
+// ─── TIPS FILTER ──────────────────────────────────────────────
+function filterTips(filter, btn) {
+  document.querySelectorAll('#tipsCityFilter .pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tip-card, .section-label').forEach(el => {
+    if (filter === 'all') {
+      el.classList.remove('hidden');
+    } else {
+      const show = el.classList.contains('tips-' + filter);
+      el.classList.toggle('hidden', !show);
+    }
+  });
+}
 
 // ─── INIT ─────────────────────────────────────────────────────
 updateTopbar();
