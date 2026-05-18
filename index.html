@@ -6,6 +6,8 @@
 <title>Europe 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   :root {
     --cream: #F5EFE4;
@@ -757,6 +759,58 @@
     font-size: 13px;
   }
   .empty-state-icon { font-size: 32px; margin-bottom: 10px; }
+
+  /* ─── MAP PAGE ─── */
+  #mapContainer { height: 350px; width: 100%; z-index: 1; }
+  .leaflet-popup-content { font-family: "DM Sans", sans-serif; font-size: 12px; line-height: 1.5; min-width: 160px; }
+  .leaflet-popup-content strong { font-size: 13px; color: #1A1612; display: block; margin-bottom: 3px; }
+  .leaflet-popup-content .pop-note { color: #7A7068; font-size: 11px; }
+  .leaflet-popup-content .pop-link { display: inline-block; margin-top: 7px; background: #C4622D; color: white; padding: 5px 10px; border-radius: 20px; font-size: 11px; text-decoration: none; }
+  .map-offline-note { background: #FFF8EC; border-left: 3px solid #C9A84C; margin: 10px 16px; padding: 10px 12px; border-radius: 0 8px 8px 0; font-size: 11px; color: #7A7068; line-height: 1.5; }
+  .map-offline-note strong { color: #1A1612; }
+  .loc-list { padding: 0 16px 10px; }
+  .loc-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(26,22,18,0.08); cursor: pointer; }
+  .loc-item:last-child { border-bottom: none; }
+  .loc-item:active { opacity: 0.7; }
+  .loc-emoji { font-size: 18px; width: 32px; text-align: center; flex-shrink: 0; }
+  .loc-info { flex: 1; }
+  .loc-name { font-size: 13px; font-weight: 500; color: #1A1612; }
+  .loc-type { font-size: 10px; color: #7A7068; margin-top: 1px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .loc-maps-btn { font-size: 10px; color: #C4622D; text-decoration: none; background: #FEF3EC; padding: 4px 9px; border-radius: 12px; white-space: nowrap; flex-shrink: 0; }
+
+  /* ─── EXPENSE LOGGER ─── */
+  .expense-fab { position: fixed; bottom: 76px; right: 20px; width: 48px; height: 48px; border-radius: 50%; background: var(--accent); color: white; border: none; font-size: 24px; cursor: pointer; box-shadow: 0 4px 16px rgba(196,98,45,0.4); z-index: 98; display: none; align-items: center; justify-content: center; line-height: 1; }
+  .expense-fab.visible { display: flex; }
+  .expense-sheet { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%); width: 100%; max-width: 430px; background: white; border-radius: 20px 20px 0 0; padding: 20px 20px 32px; z-index: 200; transition: transform 0.3s ease; box-shadow: 0 -8px 32px rgba(0,0,0,0.15); }
+  .expense-sheet.open { transform: translateX(-50%) translateY(0); }
+  .expense-sheet-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
+  .expense-sheet-title { font-family: "Playfair Display", serif; font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 16px; }
+  .expense-field { margin-bottom: 12px; }
+  .expense-field label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); display: block; margin-bottom: 5px; }
+  .expense-field input, .expense-field select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px; font-family: "DM Sans", sans-serif; font-size: 14px; color: var(--ink); background: var(--warm-white); outline: none; }
+  .expense-field input:focus, .expense-field select:focus { border-color: var(--accent); }
+  .expense-row-btns { display: flex; gap: 10px; margin-top: 16px; }
+  .expense-submit { flex: 1; background: var(--accent); color: white; border: none; border-radius: 12px; padding: 13px; font-family: "DM Sans", sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; }
+  .expense-cancel { background: var(--cream); color: var(--muted); border: none; border-radius: 12px; padding: 13px 18px; font-family: "DM Sans", sans-serif; font-size: 14px; cursor: pointer; }
+  .expense-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 199; display: none; }
+  .expense-overlay.open { display: block; }
+  .expense-tracker-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 16px 8px; }
+  .expense-tracker-title { font-size: 9px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); font-weight: 500; }
+  .expense-tracker-total { font-family: "DM Mono", monospace; font-size: 13px; color: var(--ink); }
+  .expense-log-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--border); background: white; }
+  .expense-log-emoji { font-size: 16px; width: 28px; text-align: center; }
+  .expense-log-info { flex: 1; }
+  .expense-log-note { font-size: 13px; color: var(--ink); }
+  .expense-log-cat { font-size: 10px; color: var(--muted); margin-top: 1px; }
+  .expense-log-amount { font-family: "DM Mono", monospace; font-size: 13px; color: var(--ink); }
+  .expense-log-del { background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 4px; }
+  .expense-progress { margin: 0 16px 12px; background: var(--cream); border-radius: 12px; padding: 12px 14px; }
+  .expense-progress-row { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 7px; }
+  .expense-progress-bar { height: 6px; background: rgba(26,22,18,0.1); border-radius: 3px; overflow: hidden; }
+  .expense-progress-fill { height: 100%; background: var(--sage); border-radius: 3px; transition: width 0.4s ease; }
+  .expense-progress-fill.over { background: var(--accent); }
+  .expense-empty { text-align: center; padding: 24px; color: var(--muted); font-size: 12px; }
+
 </style>
 </head>
 <body>
@@ -1074,6 +1128,46 @@
   </div>
 
   <div style="height:10px"></div>
+</div>
+
+
+<!-- ═══════════ PAGE: MAP ═══════════ -->
+<div class="page" id="page-map">
+  <div class="pill-toggle" id="mapCityFilter" style="padding-bottom:10px;">
+    <button class="pill active" onclick="switchCity('amsterdam', this)">🇳🇱 Amsterdam</button>
+    <button class="pill" onclick="switchCity('brussels', this)">🇧🇪 Brussels</button>
+    <button class="pill" onclick="switchCity('ghent', this)">Ghent</button>
+    <button class="pill" onclick="switchCity('bruges', this)">Bruges</button>
+    <button class="pill" onclick="switchCity('paris', this)">🇫🇷 Paris</button>
+  </div>
+
+  <div id="mapContainer"></div>
+
+  <div class="map-offline-note">
+    📴 <strong>For offline use:</strong> Google Maps → search city → tap name → ⋮ → Download. Do this for Amsterdam, Brussels &amp; Paris before you leave Toronto. Also try <strong>Maps.me</strong> — free, fully offline.
+  </div>
+
+  <div class="section-label" id="mapCityLabel">Amsterdam · Your Locations</div>
+  <div class="loc-list" id="locationList"></div>
+
+  <div class="expense-tracker-header">
+    <div class="expense-tracker-title">Trip Expenses Logged</div>
+    <div class="expense-tracker-total" id="expTotalDisplay">€0.00</div>
+  </div>
+  <div class="expense-progress" id="expProgress">
+    <div class="expense-progress-row">
+      <span id="expProgressLabel">€0 spent of €900 food budget</span>
+      <span id="expProgressPct">0%</span>
+    </div>
+    <div class="expense-progress-bar">
+      <div class="expense-progress-fill" id="expProgressFill" style="width:0%"></div>
+    </div>
+  </div>
+  <div class="budget-group" id="expenseLogList">
+    <div class="expense-empty">No expenses logged yet.<br>Tap + to add your first one.</div>
+  </div>
+  <div style="height:10px"></div>
+
 </div>
 
 <!-- ═══════════ PAGE: BOOKINGS ═══════════ -->
@@ -1405,7 +1499,11 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     <span>Days</span>
   </button>
-  <button class="nav-item" onclick="showPage('budget', this)">
+  <button class="nav-item" onclick="showPage('map', this); initMap();">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+    <span>Map</span>
+  </button>
+  <button class="nav-item" onclick="showPage('budget', this); document.getElementById('expenseFab').classList.add('visible');">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
     <span>Budget</span>
   </button>
@@ -1725,6 +1823,8 @@ function showPage(id, btn) {
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
   btn.classList.add('active');
+  const fab = document.getElementById('expenseFab');
+  if (id === 'budget') { fab.classList.add('visible'); } else { fab.classList.remove('visible'); }
 }
 
 function toggleBooking(headerEl) {
@@ -1838,10 +1938,272 @@ function appendBubble(text, type) {
   return el;
 }
 
+
+// ─── MAP DATA ─────────────────────────────────────────────────
+const cityData = {
+  amsterdam: {
+    label: 'Amsterdam · Your Locations',
+    center: [52.3741, 4.8982],
+    zoom: 14,
+    places: [
+      { name: 'Best Western Dam Square Inn', icon: '🏨', type: 'Your Hotel', lat: 52.3741, lng: 4.8919, note: 'May 23–26 · payment due at check-in' },
+      { name: 'Rijksmuseum', icon: '🎨', type: 'Museum · Booked', lat: 52.3600, lng: 4.8852, note: 'May 25 · 12:30 PM timed entry' },
+      { name: 'Van Gogh Museum', icon: '🌻', type: 'Museum · Booked', lat: 52.3584, lng: 4.8811, note: 'May 25 · 4:00 PM timed entry' },
+      { name: 'Anne Frank House', icon: '📖', type: 'Attraction', lat: 52.3752, lng: 4.8840, note: 'Book ahead · often sold out' },
+      { name: 'Albert Cuyp Market', icon: '🛒', type: 'Food Market', lat: 52.3549, lng: 4.8953, note: 'May 25 morning · great cheap lunch' },
+      { name: 'Foodhallen', icon: '🍽️', type: 'Food Hall', lat: 52.3613, lng: 4.8663, note: 'Indoor street food · good first dinner' },
+      { name: 'De 9 Straatjes (Jordaan)', icon: '🛍️', type: 'Shopping', lat: 52.3738, lng: 4.8826, note: 'Boutique shopping · local cafes' },
+      { name: 'Amsterdam Centraal', icon: '🚆', type: 'Transport', lat: 52.3791, lng: 4.9003, note: 'Main train station · 10 min walk from hotel' },
+      { name: 'Zaanse Schans', icon: '🌬️', type: 'Day Trip', lat: 52.4739, lng: 4.8178, note: 'May 24 · 30 min by NS train · windmills + cheese' },
+      { name: 'Canal Cruise Departure', icon: '⛵', type: 'Activity', lat: 52.3738, lng: 4.9001, note: 'May 24 · 1-hour cruise via Klook' },
+    ]
+  },
+  brussels: {
+    label: 'Brussels · Your Locations',
+    center: [52.8503, 4.3517],
+    zoom: 14,
+    places: [
+      { name: 'NH Collection Brussels Centre', icon: '🏨', type: 'Your Hotel', lat: 50.8524, lng: 4.3571, note: 'May 26–28 · rooftop breakfast · 9 min from station' },
+      { name: 'Grand Place', icon: '⭐', type: 'Attraction', lat: 50.8467, lng: 4.3525, note: 'UNESCO · 8 min walk from hotel · free' },
+      { name: 'Atomium', icon: '🔮', type: 'Attraction', lat: 50.8947, lng: 4.3411, note: 'Book tickets ahead' },
+      { name: 'Manneken Pis', icon: '💧', type: 'Attraction', lat: 50.8451, lng: 4.3499, note: 'Iconic statue · 5 min walk from hotel' },
+      { name: 'Delirium Cafe', icon: '🍺', type: 'Food', lat: 50.8489, lng: 4.3527, note: '2,000+ beers · near Grand Place' },
+      { name: 'Pierre Marcolini', icon: '🍫', type: 'Chocolate', lat: 50.8474, lng: 4.3512, note: 'Top Belgian chocolate · near Grand Place' },
+      { name: 'Brussels Midi Station', icon: '🚆', type: 'Transport', lat: 50.8355, lng: 4.3364, note: 'Departs 11:04 AM May 26 (from AMS) · 8:43 AM May 28 (to Paris)' },
+    ]
+  },
+  ghent: {
+    label: 'Ghent · Day Trip May 27',
+    center: [51.0543, 3.7214],
+    zoom: 15,
+    places: [
+      { name: 'Gravensteen Castle', icon: '🏰', type: 'Attraction', lat: 51.0570, lng: 3.7196, note: 'Medieval castle in the city centre' },
+      { name: 'St Bavo Cathedral', icon: '⛪', type: 'Attraction', lat: 51.0534, lng: 3.7214, note: 'Van Eyck Ghent Altarpiece inside' },
+      { name: 'Graslei Quay', icon: '📸', type: 'Photo Spot', lat: 51.0536, lng: 3.7228, note: 'Most photographed street in Ghent' },
+      { name: 'Ghent Sint-Pieters Station', icon: '🚆', type: 'Transport', lat: 51.0360, lng: 3.7106, note: '~1 hr from Brussels · €23.80 via Omio' },
+    ]
+  },
+  bruges: {
+    label: 'Bruges · Day Trip May 27',
+    center: [51.2093, 3.2247],
+    zoom: 15,
+    places: [
+      { name: 'Markt Square', icon: '⭐', type: 'Attraction', lat: 51.2093, lng: 3.2247, note: 'Heart of Bruges' },
+      { name: 'Belfry Tower', icon: '🔔', type: 'Attraction', lat: 51.2084, lng: 3.2244, note: 'Climb for panoramic views' },
+      { name: 'De Halve Maan Brewery', icon: '🍺', type: 'Food', lat: 51.2047, lng: 3.2244, note: 'Only working brewery in city centre' },
+      { name: 'Chocolate Line', icon: '🍫', type: 'Food', lat: 51.2099, lng: 3.2234, note: 'Famous Bruges chocolatier' },
+      { name: 'Canal Boat Dock', icon: '⛵', type: 'Activity', lat: 51.2076, lng: 3.2268, note: '~€10 · canal tour through medieval city' },
+      { name: 'Bruges Station', icon: '🚆', type: 'Transport', lat: 51.1972, lng: 3.2168, note: '~25 min from Ghent · €17.80 via Omio' },
+    ]
+  },
+  paris: {
+    label: 'Paris · Your Locations',
+    center: [48.8650, 2.3270],
+    zoom: 13,
+    places: [
+      { name: 'Hotel Touring Opera', icon: '🏨', type: 'Your Hotel', lat: 48.8771, lng: 2.3429, note: 'May 28–31 · 21 Rue Buffault · leave key at desk when out' },
+      { name: 'Eiffel Tower', icon: '🗼', type: 'Attraction', lat: 48.8584, lng: 2.2945, note: 'May 28 · Champ de Mars viewing area' },
+      { name: 'Trocadero', icon: '📸', type: 'Photo Spot', lat: 48.8620, lng: 2.2889, note: 'Best Eiffel Tower photo angle' },
+      { name: 'Arc de Triomphe', icon: '🏛️', type: 'Attraction', lat: 48.8738, lng: 2.2950, note: 'May 28 · book entry in advance' },
+      { name: 'Galeries Lafayette', icon: '🛍️', type: 'Shopping', lat: 48.8738, lng: 2.3320, note: 'Free rooftop terrace · great city views' },
+      { name: 'Louvre Museum', icon: '🖼️', type: 'Museum · Booked', lat: 48.8606, lng: 2.3376, note: 'May 29 · 5:00 PM · open till 9:45 PM' },
+      { name: 'Sainte-Chapelle', icon: '✨', type: 'Attraction', lat: 48.8554, lng: 2.3450, note: 'May 29 · stunning stained glass' },
+      { name: 'Notre-Dame Cathedral', icon: '⛪', type: 'Attraction', lat: 48.8530, lng: 2.3499, note: 'May 29 · exterior + Seine walk' },
+      { name: 'Le Marais / Place des Vosges', icon: '🛍️', type: 'Neighbourhood', lat: 48.8554, lng: 2.3625, note: 'May 29 afternoon · vintage shops' },
+      { name: 'Sacre-Coeur', icon: '⛪', type: 'Attraction', lat: 48.8867, lng: 2.3431, note: 'May 30 morning · free entry' },
+      { name: 'Rue de l Abreuvoir', icon: '📸', type: 'Photo Spot', lat: 48.8875, lng: 2.3388, note: 'Most photographed street in Montmartre' },
+      { name: 'Pink Mamma', icon: '🍽️', type: 'Food', lat: 48.8853, lng: 2.3365, note: 'Trendy Italian · Montmartre brunch' },
+      { name: 'Moulin Rouge', icon: '❤️', type: 'Attraction', lat: 48.8842, lng: 2.3323, note: 'Exterior photo op near Montmartre' },
+      { name: 'Jardin du Luxembourg', icon: '🌿', type: 'Park', lat: 48.8462, lng: 2.3372, note: 'May 29 morning walk' },
+      { name: 'Gare du Nord', icon: '🚆', type: 'Transport', lat: 48.8809, lng: 2.3553, note: 'Arrive from Brussels 10:05 AM May 28' },
+      { name: 'Seine River Cruise', icon: '⛵', type: 'Activity', lat: 48.8553, lng: 2.3415, note: 'May 28 evening · Vedettes du Pont Neuf ~€30' },
+    ]
+  }
+};
+
+let leafletMap = null;
+let mapMarkers = [];
+let mapInitialized = false;
+let currentCity = 'amsterdam';
+
+function initMap() {
+  if (mapInitialized) {
+    leafletMap.invalidateSize();
+    return;
+  }
+  leafletMap = L.map('mapContainer', { zoomControl: true, attributionControl: false }).setView([52.3741, 4.8982], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(leafletMap);
+  mapInitialized = true;
+  renderMapCity('amsterdam');
+}
+
+function switchCity(city, btn) {
+  document.querySelectorAll('#mapCityFilter .pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  currentCity = city;
+  document.getElementById('mapCityLabel').textContent = cityData[city].label;
+  if (mapInitialized) renderMapCity(city);
+}
+
+function renderMapCity(city) {
+  mapMarkers.forEach(m => m.remove());
+  mapMarkers = [];
+  const data = cityData[city];
+  // Brussels has a wrong center y coordinate — fix it
+  const center = city === 'brussels' ? [50.8503, 4.3517] : data.center;
+  leafletMap.flyTo(center, data.zoom, { duration: 1 });
+  data.places.forEach((place, i) => {
+    const icon = L.divIcon({
+      html: '<div style="font-size:20px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.3))">' + place.icon + '</div>',
+      className: '',
+      iconSize: [28, 28],
+      iconAnchor: [14, 14]
+    });
+    const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + place.lat + ',' + place.lng;
+    const marker = L.marker([place.lat, place.lng], { icon }).addTo(leafletMap);
+    marker.bindPopup('<strong>' + place.name + '</strong><div class="pop-note">' + place.note + '</div><a href="' + mapsUrl + '" target="_blank" class="pop-link">Open in Google Maps</a>');
+    mapMarkers.push(marker);
+  });
+  renderLocationList(city);
+}
+
+function renderLocationList(city) {
+  const container = document.getElementById('locationList');
+  const places = cityData[city].places;
+  container.innerHTML = places.map((p, i) => {
+    const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + p.lat + ',' + p.lng;
+    return '<div class="loc-item" onclick="flyToMarker(' + i + ')">' +
+      '<div class="loc-emoji">' + p.icon + '</div>' +
+      '<div class="loc-info"><div class="loc-name">' + p.name + '</div><div class="loc-type">' + p.type + '</div></div>' +
+      '<a href="' + mapsUrl + '" target="_blank" class="loc-maps-btn" onclick="event.stopPropagation()">Maps</a>' +
+      '</div>';
+  }).join('');
+}
+
+function flyToMarker(i) {
+  if (!mapInitialized) return;
+  const place = cityData[currentCity].places[i];
+  leafletMap.flyTo([place.lat, place.lng], 16, { duration: 0.8 });
+  setTimeout(() => mapMarkers[i].openPopup(), 900);
+}
+
+// ─── EXPENSE LOGGER ──────────────────────────────────────────
+const FOOD_BUDGET_EUR = 900; // ~€100/day x 9 days
+
+function getExpenses() {
+  return JSON.parse(localStorage.getItem('tripExpenses') || '[]');
+}
+
+function saveExpenses(expenses) {
+  localStorage.setItem('tripExpenses', JSON.stringify(expenses));
+}
+
+function openExpenseSheet() {
+  document.getElementById('expenseSheet').classList.add('open');
+  document.getElementById('expenseOverlay').classList.add('open');
+  document.getElementById('expAmt').focus();
+}
+
+function closeExpenseSheet() {
+  document.getElementById('expenseSheet').classList.remove('open');
+  document.getElementById('expenseOverlay').classList.remove('open');
+  document.getElementById('expAmt').value = '';
+  document.getElementById('expNote').value = '';
+}
+
+function submitExpense() {
+  const amt = parseFloat(document.getElementById('expAmt').value);
+  if (!amt || amt <= 0) { document.getElementById('expAmt').focus(); return; }
+  const cur = document.getElementById('expCur').value;
+  const cat = document.getElementById('expCat').value;
+  const note = document.getElementById('expNote').value || cat.split(' ').slice(1).join(' ');
+  const expenses = getExpenses();
+  expenses.unshift({ amt, cur, cat, note, date: new Date().toLocaleDateString('en-CA', { month: 'short', day: 'numeric' }) });
+  saveExpenses(expenses);
+  closeExpenseSheet();
+  renderExpenses();
+}
+
+function deleteExpense(i) {
+  const expenses = getExpenses();
+  expenses.splice(i, 1);
+  saveExpenses(expenses);
+  renderExpenses();
+}
+
+function renderExpenses() {
+  const expenses = getExpenses();
+  const totalEur = expenses.filter(e => e.cur === 'EUR').reduce((s, e) => s + e.amt, 0);
+  const totalCad = expenses.filter(e => e.cur === 'CAD').reduce((s, e) => s + e.amt, 0);
+  const displayTotal = (totalEur > 0 ? '€' + totalEur.toFixed(2) : '') + (totalEur > 0 && totalCad > 0 ? ' + ' : '') + (totalCad > 0 ? '$' + totalCad.toFixed(2) + ' CAD' : '');
+  document.getElementById('expTotalDisplay').textContent = displayTotal || '€0.00';
+  const pct = Math.min((totalEur / FOOD_BUDGET_EUR) * 100, 100);
+  const over = totalEur > FOOD_BUDGET_EUR;
+  document.getElementById('expProgressLabel').textContent = '€' + totalEur.toFixed(0) + ' of €' + FOOD_BUDGET_EUR + ' food budget';
+  document.getElementById('expProgressPct').textContent = Math.round((totalEur / FOOD_BUDGET_EUR) * 100) + '%';
+  document.getElementById('expProgressFill').style.width = pct + '%';
+  document.getElementById('expProgressFill').className = 'expense-progress-fill' + (over ? ' over' : '');
+  const list = document.getElementById('expenseLogList');
+  if (expenses.length === 0) {
+    list.innerHTML = '<div class="expense-empty">No expenses logged yet.<br>Tap + to add your first one.</div>';
+    return;
+  }
+  list.innerHTML = expenses.map((e, i) =>
+    '<div class="expense-log-item">' +
+    '<div class="expense-log-emoji">' + e.cat.split(' ')[0] + '</div>' +
+    '<div class="expense-log-info"><div class="expense-log-note">' + e.note + '</div><div class="expense-log-cat">' + e.date + ' · ' + e.cur + '</div></div>' +
+    '<div class="expense-log-amount">' + (e.cur === 'EUR' ? '€' : '$') + e.amt.toFixed(2) + '</div>' +
+    '<button class="expense-log-del" onclick="deleteExpense(' + i + ')">×</button>' +
+    '</div>'
+  ).join('');
+}
+
+renderExpenses();
+
 // ─── INIT ─────────────────────────────────────────────────────
 updateTopbar();
 renderDayCards();
 renderPackingList();
 </script>
+
+<!-- EXPENSE SHEET -->
+<div class="expense-overlay" id="expenseOverlay" onclick="closeExpenseSheet()"></div>
+<div class="expense-sheet" id="expenseSheet">
+  <div class="expense-sheet-handle"></div>
+  <div class="expense-sheet-title">Log Expense</div>
+  <div class="expense-field">
+    <label>Amount</label>
+    <input type="number" id="expAmt" placeholder="0.00" step="0.01" min="0">
+  </div>
+  <div class="expense-field">
+    <label>Currency</label>
+    <select id="expCur">
+      <option value="EUR">EUR €</option>
+      <option value="CAD">CAD $</option>
+    </select>
+  </div>
+  <div class="expense-field">
+    <label>Category</label>
+    <select id="expCat">
+      <option value="🍽️ Food">🍽️ Food</option>
+      <option value="🚇 Transport">🚇 Transport</option>
+      <option value="🎨 Attraction">🎨 Attraction</option>
+      <option value="🛍️ Shopping">🛍️ Shopping</option>
+      <option value="☕ Coffee">☕ Coffee</option>
+      <option value="🏨 Hotel">🏨 Hotel</option>
+      <option value="📦 Other">📦 Other</option>
+    </select>
+  </div>
+  <div class="expense-field">
+    <label>Note (optional)</label>
+    <input type="text" id="expNote" placeholder="e.g. Lunch at Albert Cuyp">
+  </div>
+  <div class="expense-row-btns">
+    <button class="expense-cancel" onclick="closeExpenseSheet()">Cancel</button>
+    <button class="expense-submit" onclick="submitExpense()">Add Expense</button>
+  </div>
+</div>
+<button class="expense-fab" id="expenseFab" onclick="openExpenseSheet()">+</button>
+
 </body>
 </html>
