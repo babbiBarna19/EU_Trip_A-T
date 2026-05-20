@@ -816,6 +816,24 @@ function onGoogleMapsReady() { window.googleMapsReady = true; }
   .tip-card.hidden { display: none; }
   .section-label.hidden { display: none; }
 
+
+  .loc-quick-btn {
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    border-radius: 20px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-family: "DM Sans", sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: opacity 0.15s;
+    letter-spacing: 0.01em;
+  }
+  .loc-quick-btn:active { opacity: 0.7; }
+  #locationQuickBar::-webkit-scrollbar { display: none; }
+
 </style>
 </head>
 <body>
@@ -1395,12 +1413,35 @@ function onGoogleMapsReady() { window.googleMapsReady = true; }
     </div>
   </div>
 
-  <div class="chat-suggestions" id="chatSuggestions">
-    <button class="chat-suggestion-btn" onclick="sendSuggestion(this)">Best café near Rijksmuseum?</button>
-    <button class="chat-suggestion-btn" onclick="sendSuggestion(this)">What to do if it rains in Bruges?</button>
-    <button class="chat-suggestion-btn" onclick="sendSuggestion(this)">Best local food in Ghent?</button>
-    <button class="chat-suggestion-btn" onclick="sendSuggestion(this)">Eiffel Tower tips</button>
-    <button class="chat-suggestion-btn" onclick="sendSuggestion(this)">Pack list reminder?</button>
+  <div style="padding: 12px 16px 4px;">
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:8px;font-weight:500;">📍 I'm at…</div>
+    <div style="display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;" id="locationQuickBar">
+      <button class="loc-quick-btn" onclick="askAboutLocation('rijksmuseum')">🎨 Rijksmuseum</button>
+      <button class="loc-quick-btn" onclick="askAboutLocation('vangogh')">🌻 Van Gogh</button>
+      <button class="loc-quick-btn" onclick="askAboutLocation('zaanseschans')">🌬️ Zaanse Schans</button>
+      <button class="loc-quick-btn" onclick="askAboutLocation('grandplace')">⭐ Grand Place</button>
+      <button class="loc-quick-btn" onclick="askAboutLocation('ghent')">🏰 Ghent</button>
+      <button class="loc-quick-btn" onclick="askAboutLocation('bruges')">⛵ Bruges</button>
+      <button class="loc-quick-btn" onclick="askAboutLocation('eiffeltower')">🗼 Eiffel Tower</button>
+      <button class="loc-quick-btn" onclick="askAboutLocation('louvre')">🖼️ Louvre</button>
+      <button class="loc-quick-btn" onclick="askAboutLocation('sainteChapelle')">✨ Sainte-Chapelle</button>
+      <button class="loc-quick-btn" onclick="askAboutLocation('notredame')">⛪ Notre-Dame</button>
+      <button class="loc-quick-btn" onclick="askAboutLocation('marais')">🛍️ Le Marais</button>
+      <button class="loc-quick-btn" onclick="askAboutLocation('montmartre')">📸 Montmartre</button>
+      <button class="loc-quick-btn" onclick="askAboutLocation('orsay')">🎭 Musée d'Orsay</button>
+      <button class="loc-quick-btn" onclick="askAboutLocation('jordaan')">🚲 Jordaan</button>
+    </div>
+  </div>
+
+  <div style="padding: 4px 16px 8px;">
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:8px;font-weight:500;">💬 Quick Questions</div>
+    <div class="chat-suggestions" id="chatSuggestions" style="padding:0;margin:0;">
+      <button class="chat-suggestion-btn" onclick="sendSuggestion(this)">What should I eat today?</button>
+      <button class="chat-suggestion-btn" onclick="sendSuggestion(this)">Rain backup plan?</button>
+      <button class="chat-suggestion-btn" onclick="sendSuggestion(this)">Best photo spots today?</button>
+      <button class="chat-suggestion-btn" onclick="sendSuggestion(this)">How's our budget looking?</button>
+      <button class="chat-suggestion-btn" onclick="sendSuggestion(this)">What's nearby right now?</button>
+    </div>
   </div>
 
   <div class="chat-input-bar">
@@ -1938,23 +1979,166 @@ function updateTopbar() {
 }
 
 // ─── AI CHAT ─────────────────────────────────────────────────
-const TRIP_CONTEXT = `You are a knowledgeable travel assistant for Boon and his girlfriend TG (Tricia) who are on a Europe trip May 23–31 2026. Here is their complete itinerary and context:
+const TRIP_CONTEXT = `You are a companion tour guide and travel assistant for Boon and his girlfriend TG (Tricia) on a Europe trip May 23-31 2026. You have deep knowledge of every location on their itinerary. You give specific, insider, contextual information — not generic travel advice. You know their schedule, bookings, and budget. Keep answers concise for mobile reading but rich with specific details. Use bullet points for lists.
 
-CITIES: Amsterdam (May 23–26), Brussels (May 26–28), Ghent & Bruges day trip (May 27), Paris (May 28–31).
+TRIP OVERVIEW:
+- Amsterdam May 23-26 (Best Western Dam Square Inn, breakfast included, payment due at check-in on Visa)
+- Brussels May 26-28 (NH Collection Brussels Centre, rooftop breakfast, 9 min walk from station)
+- Ghent + Bruges day trip May 27
+- Paris May 28-31 (Hotel Touring Opera, 21 Rue Buffault 75009, no breakfast, 8 min from Gare du Nord)
+- Return flight May 31 12:00 PM CDG
 
-HOTELS: Best Western Dam Square Inn Amsterdam (breakfast included), NH Collection Brussels Centre (breakfast included, 9 min from station), Hotel Touring Paris 21 Rue Buffault 75009 (no breakfast, 8 min from Gare du Nord by bus).
+KEY BOOKINGS:
+- Rijksmuseum May 25 12:30 PM (GetYourGuide, $86.32)
+- Van Gogh Museum May 25 4:00 PM (official site, $80.14)
+- Louvre May 29 5:00 PM (open till 9:45 PM, $102.57)
+- Sainte-Chapelle May 29 (book online, €60)
+- Canal cruise May 24 via Klook ($38)
+- Seine River Cruise May 28 evening, Vedettes du Pont Neuf €30
 
-KEY BOOKINGS: Rijksmuseum 12:30 PM May 25, Van Gogh Museum 4 PM May 25, Louvre 5 PM May 29, Canal cruise via Klook ~May 24.
+TRANSPORT:
+- AMS Zuid → Brussels Midi: May 26, 11:04 AM, ECD 9532 Track 3
+- Brussels → Paris: May 28, 08:43 AM Train 9414 ref HTJQMT, arrive 10:05. Must arrive station by 7 AM.
+- Flight confirmation: ON40Y1
 
-TRANSPORT: Amsterdam ECD 9532 May 26 11:04 AM → Brussels. Brussels→Paris Train 9414 ref HTJQMT May 28 08:43 arrive 10:05. Must arrive Brussels station by 7 AM.
+BUDGET: ~€100/day food for both. KOHO card for spending. Barney (dog) care arranged by TG.
 
-FOOD BUDGET: ~€100/day for both. Amsterdam hotel has breakfast. 
+DEEP KNOWLEDGE — AMSTERDAM:
 
-INTERESTS: Local neighbourhood exploration, museums, food markets, canals, history, vintage shopping, photography (Rue de l'Abreuvoir Montmartre, Trocadéro Eiffel shots). TG is the main planner. Boon has KOHO card.
+Rijksmuseum (May 25, 12:30 PM):
+- The Night Watch by Rembrandt is the centerpiece — 3.6m tall, painted 1642. Fact: it was cut down from its original size in 1715 to fit through a door. The figures on the far left were removed. Stand back to see the full dramatic lighting effect.
+- The Milkmaid (Vermeer) — small, easy to walk past, but one of the most technically perfect paintings ever. Note how the light comes from the left window and falls on textured bread — Vermeer spent weeks on this effect.
+- Dutch Delftware collection — born from the Dutch East India Company (VOC) bringing back Chinese porcelain. Dutch potters couldn't figure out the formula so they invented their own blue-and-white style. Entire new art form by accident.
+- Ship models — the Dutch were the world's dominant sea trading power in the 1600s. The VOC was the world's first multinational corporation.
+- Suggested route from 12:30: Ground floor → Night Watch (2nd floor Honour Gallery) → Vermeer rooms → Delftware → Library. Allow 2.5 hrs, leave by 3:30 PM for Van Gogh.
 
-PET: They have a dog named Barney who needs to be arranged before the trip.
+Van Gogh Museum (May 25, 4:00 PM):
+- Van Gogh sold exactly ONE painting in his lifetime (The Red Vineyard, to his brother's friend for 400 francs).
+- The Bedroom — painted three times. The deliberately skewed perspective was intentional: he said it represented "absolute rest." Note the lack of shadows — he wanted flatness.
+- Almond Blossom — painted in Feb 1890 to celebrate his nephew's birth (named Vincent Willem after him). The most tender painting in the collection. Japanese woodblock influence is clear.
+- The Potato Eaters (1885) — his dark early Dutch period. Compare this to the electric yellows of his Arles work 2 years later. The transformation is shocking.
+- He moved to the South of France chasing light. Arles had 300 days of sun vs Amsterdam's grey. The yellows came directly from that light.
+- Self-Portrait with Bandaged Ear — painted days after cutting off his ear. He looks completely calm. That disconnect is haunting.
+- Practical: 15-30 min early arrival ok. Audio guide worth getting (€5 extra). Start top floor and work down.
 
-Be warm, concise, and practical. Give specific names, not generic advice. Reference their actual itinerary when relevant. Keep answers short for mobile reading.`;
+Zaanse Schans (May 24):
+- Not a museum — a real village. People actually live there. The windmills are working industrial machines, not decorations.
+- The windmills were sawmills, oil mills, paper mills — powering Dutch industry in the 1600s. At peak there were 1,000 windmills in the Zaan region alone.
+- Cheese making demo: the Catharina Hoeve farm is free to enter. Watch the curdling process. Sample everything — the young Gouda and aged Gouda taste completely different.
+- Wooden shoe (klompen) workshop is worth 15 min — they carve them live from poplar wood.
+- NS train from Centraal to Koog-Zaandijk, 17 min, ~€4 each way. Walk 10 min to the windmills.
+
+Jordaan / De 9 Straatjes:
+- The Nine Streets (De 9 Straatjes) connect the main canals of the Jordaan. Originally working class, now the most charming shopping area in Amsterdam.
+- Look for: vintage stores, independent bookshops, artisan chocolate. Avoid: tourist shops near Dam Square.
+- Café 't Smalle on Egelantiersgracht — one of the oldest brown cafés in Amsterdam (1786). Have a jenever (Dutch gin) here.
+- The Jordaan canal at golden hour (7-9 PM in May) is one of the most beautiful things in Amsterdam. Walk south from Westerkerk along Keizersgracht.
+
+Canal Cruise:
+- Evening cruises (after 6 PM) are better — fewer tour boats, golden light, canal house lights reflecting on water.
+- The narrowest canal houses were built narrow on purpose — property tax was based on facade width. They built UP instead of wide. Hence the steep staircases and the hooks at the top of every building (to haul furniture up).
+- The 17th century canal ring is a UNESCO World Heritage Site — one of the largest in the Netherlands.
+
+DEEP KNOWLEDGE — BRUSSELS:
+
+Grand Place:
+- Victor Hugo called it "the most beautiful square in the world."
+- The Guild Houses surrounding the square were rebuilt in just 4 years after French bombardment in 1695 destroyed most of them.
+- The Town Hall (Gothic, 15th century) is the only original building — everything else is 17th century rebuilds. The angel on the spire is St Michael, Brussels' patron saint.
+- Best time: early morning before 9 AM (empty) or after 9 PM (dramatically lit).
+
+Atomium:
+- Built for the 1958 World's Fair. Originally meant to be temporary (like the Eiffel Tower).
+- Represents an iron crystal magnified 165 billion times. Each sphere is 18m in diameter.
+- The top sphere has a panoramic restaurant. The tube connecting the spheres has the world's longest escalator tunnel.
+- Book tickets online — queues can be 45+ min at the door.
+
+Belgian Beer:
+- Trappist beers (Chimay, Orval, Westvleteren) are brewed by actual monks in monasteries. Only 14 breweries in the world have this designation.
+- Each Belgian beer has its own glass — this is legally protected by some brands. Drinking from the wrong glass is genuinely frowned upon.
+- Delirium Café holds the Guinness World Record for most beers available (2,000+). Their Delirium Tremens (pink elephants label) is 8.5% — watch your intake.
+- Lambic beer (Brussels specialty) is spontaneously fermented using wild yeast from the Senne valley air. It's sour, funky, and completely unlike anything else.
+
+DEEP KNOWLEDGE — GHENT & BRUGES:
+
+Ghent Altarpiece — St Bavo Cathedral:
+- Painted by Jan van Eyck, completed 1432. Considered one of the most important paintings in Western art.
+- It was stolen 13 times — most recently by the Nazis. The "Just Judges" panel (bottom left) was stolen in 1934 and has never been recovered. The current panel is a copy.
+- The technique Van Eyck used (oil glazing in layers) revolutionized Western painting. He didn't invent oil painting but perfected it.
+- Book tickets before going — it's a separate ticketed experience inside the cathedral.
+
+Gravensteen Castle — Ghent:
+- Built 1180 by Philip of Alsace to intimidate the citizens of Ghent (it worked for a while).
+- The citizens eventually took it over and used it as a cotton factory during the Industrial Revolution.
+- Top floor: a genuine medieval torture museum with authentic instruments. Morbid but genuinely interesting historically.
+- Rooftop battlements: best view of Ghent's medieval canal system. Free once you're inside.
+
+Bruges:
+- One of the best-preserved medieval cities in Europe — it froze in time because its river silted up in the 1400s, cutting off sea trade. Economic disaster became architectural preservation.
+- The Belfry Tower (366 steps) has 47 bells — the carillonneur plays concerts on Sundays. Views extend to the North Sea on clear days.
+- De Halve Maan Brewery: the only working brewery in Bruges centre. The tour (45 min) ends with a free beer in their rooftop terrace. Book ahead in May.
+- Chocolate Line: Patrick Roger-trained chocolatier. Wasabi ganache, bacon praline, lemongrass — unusual and very good. Worth the €25-30 for a box.
+- Canal boat tours: depart from 5 spots around the city centre, ~€10, 30 min. No need to book — just show up. Best in afternoon light.
+
+DEEP KNOWLEDGE — PARIS:
+
+Eiffel Tower area (May 28):
+- The tower was built in 1889 for the World's Fair and was meant to be demolished in 1909. It was saved because it was useful as a radio antenna.
+- Gustave Eiffel's apartment is at the very top — he could have sold it but kept it for himself to entertain guests. It's now a museum exhibit you can see.
+- Trocadéro: cross the Seine and shoot from the esplanade for the classic full-height photo. Best light: golden hour 7-9 PM. At 10 PM, 11 PM and midnight the tower sparkles for 5 minutes exactly (light show every hour on the hour after dark).
+- Champ de Mars: the park directly under the tower. Great for a picnic with a bottle of wine. Vendors sell cold bottles on the grass — negotiate.
+
+Arc de Triomphe (May 28):
+- Napoleon ordered it built in 1806 after Austerlitz — it wasn't finished until 1836, 15 years after his death.
+- Under the arch: the Tomb of the Unknown Soldier, with a flame that has burned continuously since 1921.
+- The top (284 steps) has the best view of the 12 avenues radiating out — Baron Haussmann's redesign of Paris in the 1850s-70s. He demolished 20,000 buildings to create this grid.
+- Book the summit ticket online — the queue at the base can be 45+ min.
+
+Sainte-Chapelle (May 29):
+- Built 1242-1248 by Louis IX to house the Crown of Thorns (the relics cost 3x more than the chapel to acquire).
+- The upper chapel has 15 stained glass windows from 1248 — 1,113 biblical scenes covering 600 sq metres of glass.
+- Go on a sunny day — the light turns the entire chapel kaleidoscopic. Morning light from the east (before noon) hits the best windows.
+- The lower chapel is dark and underwhelming — go straight up. Budget 45-60 min for the upper chapel.
+- It's on Île de la Cité — the literal origin point of Paris. The city grew outward from this island. Notre-Dame is a 5 min walk.
+
+Notre-Dame (May 29):
+- Construction began 1163, largely complete by 1345 — 182 years. Multiple generations of builders worked on it knowing they'd never see it finished.
+- The fire of 2019 destroyed the spire and much of the roof. Restoration is ongoing but the exterior is stunning. Interior reopened Dec 2024 — check if public access is available during your visit.
+- The gargoyles (technically "chimeras") were added in the 19th century restoration by Viollet-le-Duc — they're not medieval. The original medieval ones are plain waterspouts.
+- Best photo: from the Pont de l'Archevêché bridge, slightly downstream, with the flying buttresses visible.
+
+Louvre (May 29, 5 PM):
+- The Louvre was a royal fortress (1190), then a royal palace (1500s-1600s), then Louis XIV moved the court to Versailles and it became a museum (1793) — one of the first public museums in the world.
+- Egyptian Antiquities: Denon Wing, ground floor. Largest Egyptian collection outside Cairo. The Sphinx of Tanis weighs 12.5 tonnes. The mummy rooms are extraordinary — allow 45-60 min here alone.
+- Mona Lisa: Room 711, Denon Wing, 1st floor. Go directly there at 5 PM while others are arriving — the crowd thins dramatically by 7 PM. She's smaller than everyone expects (77 x 53 cm). The landscape behind her is more interesting than the face.
+- Winged Victory of Samothrace: top of the Daru staircase, Denon Wing. 2nd century BC. The way it's positioned so you see it from below while climbing stairs is intentional — one of the great museum installations in the world.
+- Venus de Milo: Sully Wing, ground floor. The arms were already missing when she was found in 1820. No one knows their original position.
+- Napoleon III Apartments: Richelieu Wing, 1st floor. The most over-the-top opulent rooms in France outside Versailles. Almost no one goes here. Budget 30 min.
+- Suggested 4-hour route from 5 PM: Egyptian Antiquities → Venus de Milo → Winged Victory → Mona Lisa (7 PM, much quieter) → Napoleon III Apartments → Richelieu sculpture hall. Exit by 9:30 PM.
+
+Sacré-Cœur & Montmartre (May 30):
+- Montmartre was a separate village (not part of Paris) until 1860. Artists moved there because rent was cheap outside city tax jurisdiction.
+- Picasso lived at Le Bateau-Lavoir, 13 Place Émile-Goudeau (10 min walk from Sacré-Cœur) from 1904-1909. He painted Les Demoiselles d'Avignon there — the painting that launched Cubism.
+- Sacré-Cœur was built as national penance after France lost the Franco-Prussian War (1870-71) and the traumatic Paris Commune. The building took 44 years (1875-1919). The white travertine stone actually gets whiter when it rains — it contains calcite.
+- Place du Tertre: the artists' square. In the early 1900s this is where Van Gogh, Toulouse-Lautrec and Utrillo sketched. Now it's tourist portrait artists — but the square structure is original.
+- Rue de l'Abreuvoir: best before 8:30 AM for empty streets and golden light. La Maison Rose at the end has been pink since 1875, painted by Maurice Utrillo multiple times.
+- Fotoautomat photobooth: genuine East German photo booth (1 euro, black and white strip). The one in Montmartre is near Abbesses metro.
+
+Musée d'Orsay (May 30, optional):
+- Housed in a former railway station (Gare d'Orsay, 1900). The giant clocks are original. The building itself is as interesting as the art.
+- The world's greatest Impressionist collection: Monet's Water Lilies studies, Renoir, Degas, Cézanne, Seurat.
+- Van Gogh's Bedroom in Arles and Starry Night Over the Rhône are here — different works from what you saw at the Van Gogh Museum the day before.
+- Degas' dancer sculptures are on the upper level — the wax original with real hair and fabric tutu is particularly striking.
+- If you go: afternoon is better, it closes at 6 PM (9:45 PM on Thursdays). The rooftop café has Eiffel Tower views.
+
+Le Marais (May 29 afternoon):
+- The Marais was the Jewish Quarter for centuries — still has the best falafel in Paris (L'As du Fallafel on Rue des Rosiers, €8, expect a queue).
+- Place des Vosges (1612) is the oldest planned square in Paris. Victor Hugo lived at No. 6 — now a free museum.
+- Galerie Vivienne (near Palais Royal) — a 19th century covered passage, one of the last surviving in Paris. Beautiful mosaic floors, antiquarian bookshops, independent boutiques.
+- Revoir Vintage and the Charlot Street vintage shops: best for 70s-90s European pieces. Budget 30-45 min and bring cash — some don't take cards.
+
+PRACTICAL TIPS FOR QUERIES:
+When Boon asks "what should I see/do/know" about a location, give specific insider context, what to prioritize, what most tourists miss, and any timing or logistics relevant to their actual booking. Always be specific — never say "visit the gift shop" or generic tourist advice. Reference their actual schedule when relevant.`;
 
 let chatHistory = [];
 let isLoading = false;
@@ -1990,7 +2174,7 @@ async function sendChat() {
   const loadingEl = appendBubble('Thinking…', 'loading');
 
   // 👇 Replace with your Cloudflare Worker URL after deploying
-  const PROXY_URL = 'https://YOUR_WORKER.YOUR_SUBDOMAIN.workers.dev';
+  const PROXY_URL = 'https://eubarnatrip.boonbabbi.workers.dev';
 
   try {
     const response = await fetch(PROXY_URL, {
@@ -2278,6 +2462,33 @@ function renderExpenses() {
 
 renderExpenses();
 
+
+
+// ─── LOCATION QUICK GUIDE ─────────────────────────────────────
+const locationQueries = {
+  rijksmuseum: "I'm at the Rijksmuseum with my 12:30 PM entry. What should I prioritize seeing, what's the best route, and what insider details make the Night Watch and Vermeer paintings hit differently?",
+  vangogh: "I'm at the Van Gogh Museum with my 4 PM entry. What should I know about Van Gogh's life that makes the paintings more meaningful? Key works and what to look for in each?",
+  zaanseschans: "I'm at Zaanse Schans. What should I know about how these windmills actually worked, what's worth doing here, and what's the real history of this place?",
+  grandplace: "I'm standing in Grand Place Brussels. Tell me the history of what I'm looking at, what each building is, and what I should know to appreciate it beyond just photos.",
+  ghent: "I'm in Ghent for the day. Tell me about the Ghent Altarpiece at St Bavo Cathedral, Gravensteen Castle's history, and what insider details make Ghent special beyond the tourist surface.",
+  bruges: "I'm in Bruges for the afternoon. Why does this city look the way it does? What should I know about De Halve Maan brewery and what makes Bruges historically unique?",
+  eiffeltower: "I'm at the Eiffel Tower area. Tell me the real story of how it was built, why it almost got demolished, the best photo spots at different times, and what to know about the evening light show.",
+  louvre: "I'm at the Louvre with my 5 PM entry. Give me a smart 4-hour route covering Egyptian antiquities, Mona Lisa, Winged Victory, Venus de Milo, and Napoleon III apartments — with insider context for each.",
+  sainteChapelle: "I'm at Sainte-Chapelle. Tell me about the stained glass windows, why this chapel was built, and what to look for to appreciate it fully. Best way to experience the upper chapel?",
+  notredame: "I'm at Notre-Dame Cathedral. Tell me how it was built over 182 years, what happened in the 2019 fire, what the gargoyles really are, and the best viewing angles around the island.",
+  marais: "I'm in Le Marais. Tell me the history of this neighbourhood, what Place des Vosges means in Paris history, the best vintage shops on our list, and where to eat without being too touristy.",
+  montmartre: "I'm in Montmartre near Sacre-Coeur. Which artists lived here, why was Sacre-Coeur built, what should I look for on Rue de l'Abreuvoir, and the best spots for brunch?",
+  orsay: "I'm at the Musee d'Orsay. Tell me about the building itself, what makes this Impressionist collection special, the key works I shouldn't miss, and any insider tips.",
+  jordaan: "I'm wandering the Jordaan and De 9 Straatjes in Amsterdam. What makes this neighbourhood special, what's the history of the canal houses, and where are the best local cafes?"
+}
+
+function askAboutLocation(loc) {
+  const query = locationQueries[loc];
+  if (!query) return;
+  document.getElementById("chatSuggestions").style.display = "none";
+  document.getElementById("chatInput").value = query;
+  sendChat();
+}
 
 // ─── TIPS FILTER ──────────────────────────────────────────────
 function filterTips(filter, btn) {
